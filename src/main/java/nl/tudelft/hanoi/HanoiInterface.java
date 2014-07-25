@@ -30,24 +30,6 @@ public class HanoiInterface extends AbstractEnvironment {
 	}
 
 	/**
-	 * Support function to add a disc.
-	 *
-	 * @param disc
-	 * 		disc number to add.
-	 * @param p
-	 * 		pin to add the disc to.
-	 */
-	public void actionAddDisc(int disc, int p) {
-		game.addDisc(disc, p);
-		Percept percept = new Percept("add", new Identifier(""), new Identifier(""));
-		try {
-			notifyAgentsViaEntity(percept, "agent");
-		} catch(EnvironmentInterfaceException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
 	 * Support function to move a disc.
 	 *
 	 * @param disc
