@@ -22,6 +22,8 @@ public class HanoiInterface extends AbstractEnvironment {
 	public HanoiInterface() {
 		// Create a Game instance
 		game = new Towers("Testing through EIS");
+        game.setVisible(true);
+
 		try {
 			this.addEntity("agent");
 		} catch(EntityException e) {
