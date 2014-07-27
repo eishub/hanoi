@@ -1,11 +1,17 @@
 package nl.tudelft.hanoi;
 
+import eis.eis2java.annotation.AsAction;
+import eis.eis2java.annotation.AsPercept;
 import eis.eis2java.environment.AbstractEnvironment;
 import eis.exceptions.*;
 import eis.iilang.Action;
 import eis.iilang.Identifier;
+import eis.iilang.Parameter;
 import eis.iilang.Percept;
 import hanoi.gui.Towers;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Provides an interface to the Hanoi Tower game.
@@ -14,58 +20,32 @@ import hanoi.gui.Towers;
  */
 public class HanoiInterface extends AbstractEnvironment {
 
-	private Towers game = null;
+	public Towers game = null;
 
     /**
      * Constructor for the Hanoi Interface.
      */
-	public HanoiInterface() {
-		// Create a Game instance
-		game = new Towers("Testing through EIS");
+	public HanoiInterface() throws ManagementException {
+        // Create a Game instance
+        game = new Towers("Testing through EIS");
         game.setVisible(true);
+    }
 
-		try {
-			this.addEntity("agent");
-		} catch(EntityException e) {
-			e.printStackTrace();
-		}
-	}
+    /**
+     * Initializes and registers an Entity.
+     * @param parameters
+     * @throws ManagementException
+     */
+    public void init(Map<String, Parameter> parameters) throws ManagementException {
+        super.init(parameters);
 
-	/**
-	 * Support function to add a disc.
-	 *
-	 * @param disc
-	 * 		disc number to add.
-	 * @param p
-	 * 		pin to add the disc to.
-	 */
-	public void actionAddDisc(int disc, int p) {
-		game.addDisc(disc, p);
-		Percept percept = new Percept("add", new Identifier(""), new Identifier(""));
-		try {
-			notifyAgentsViaEntity(percept, "agent");
-		} catch(EnvironmentInterfaceException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Support function to move a disc.
-	 *
-	 * @param disc
-	 * 		disc to be moved.
-	 * @param to
-	 * 		pin to move the disc to.
-	 */
-	public void actionMoveDisc(int disc, int to) {
-		game.moveDisc(disc, to);
-		Percept percept = new Percept("move", new Identifier(""), new Identifier(""));
-		try {
-			notifyAgentsViaEntity(percept, "agent");
-		} catch(EnvironmentInterfaceException e) {
-			e.printStackTrace();
-		}
-	}
+        // Try registering the Entity.
+        try {
+            registerEntity("agent", new Entity(game));
+        } catch (EntityException e) {
+            e.printStackTrace();
+        }
+    }
 
 	/**
 	 * Returns true if the action is supported by the environment.
@@ -74,7 +54,9 @@ public class HanoiInterface extends AbstractEnvironment {
 	 */
 	@Override
 	protected boolean isSupportedByEnvironment(Action action) {
-		return true;
+        if (action.getName().equals("add")) { return true; }
+        if (action.getName().equals("move")) { return true; }
+		return false;
 	}
 
 	/**
@@ -84,6 +66,64 @@ public class HanoiInterface extends AbstractEnvironment {
 	 */
 	@Override
 	protected boolean isSupportedByType(Action action, String type) {
-        return true;
+        return isSupportedByEnvironment(action);
+    }
+}
+
+class Entity {
+
+    private Towers game;
+    private int default_pin;
+    private int discs;
+
+    public Entity(Towers game) {
+        this.game = game;
+        this.default_pin = 0;
+        this.discs = 0;
+    }
+
+    /**
+     * Percept send when a Disc is added.
+     * @return position of Disc
+     */
+    @AsPercept(name = "add", multiplePercepts = true, multipleArguments = false)
+    public int add() {
+        return default_pin;
+    }
+
+    /**
+     * Percept send when a Disc is moved.
+     * @return success.
+     */
+    @AsPercept(name = "move", multiplePercepts = true, multipleArguments = false)
+    public String move() {
+        return "success";
+    }
+
+    /**
+     * Support function to add a disc.
+     *
+     * @param disc
+     * 		disc number to add.
+     * @param p
+     * 		pin to add the disc to.
+     */
+    @AsAction(name = "add")
+    public void addDisc(int disc, int p) throws ActException {
+        game.addDisc(disc, p);
+        discs++;
+    }
+
+    /**
+     * Support function to move a disc.
+     *
+     * @param disc
+     * 		disc to be moved.
+     * @param to
+     * 		pin to move the disc to.
+     */
+    @AsAction(name = "move")
+    public void moveDisc(int disc, int to) {
+        game.moveDisc(disc, to);
     }
 }
