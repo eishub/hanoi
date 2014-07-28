@@ -11,6 +11,8 @@ import eis.iilang.EnvironmentState;
 import eis.iilang.Parameter;
 import hanoi.gui.Towers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,11 +28,7 @@ public class HanoiInterface extends AbstractEnvironment {
     /**
      * Constructor for the Hanoi Interface.
      */
-	public HanoiInterface() throws ManagementException {
-        // Create a game instance
-        game = new Towers("Testing through EIS");
-        game.setVisible(true);
-    }
+	public HanoiInterface() throws ManagementException {}
 
     /**
      * Initializes and registers an Entity.
@@ -51,7 +49,7 @@ public class HanoiInterface extends AbstractEnvironment {
         reset(parameters);
 
         try {
-            registerEntity("gripper", new Entity(game));
+            registerEntity("entity", new Entity(game));
         } catch (EntityException e) {
         	throw new ManagementException("Could not create a gripper", e);
         }
@@ -71,7 +69,16 @@ public class HanoiInterface extends AbstractEnvironment {
 	public void reset(Map<String, Parameter> parameters)
 			throws ManagementException {
 
-		// TODO: must implement reset.
+        if (game != null) {
+            // Dispose the current game
+            game.dispose();
+            game = null;
+        }
+
+        // Create a game instance
+        game = new Towers("Testing through EIS");
+        game.setVisible(true);
+
 		// TODO: use Model-View-Controller setup, see blocksworld project.
 		setState(EnvironmentState.PAUSED);
 	}
@@ -93,10 +100,10 @@ public class HanoiInterface extends AbstractEnvironment {
 	 */
 	@Override
 	protected boolean isSupportedByEnvironment(Action action) {
-        if (action.getName().equals("add") && action.getParameters().size()==2) {
+        if (action.getName().equals("add") && action.getParameters().size() == 2) {
         	return true;
         }
-        if (action.getName().equals("move") && action.getParameters().size()==2) {
+        if (action.getName().equals("move") && action.getParameters().size() == 2) {
         	return true;
         }
 		return false;
@@ -117,12 +124,10 @@ class Entity {
 
     private Towers game;
     private int default_pin;
-    private int discs; // TODO: not used?
 
     public Entity(Towers game) {
         this.game = game;
         this.default_pin = 0;
-        this.discs = 0;
     }
 
     /**
@@ -132,6 +137,21 @@ class Entity {
     @AsPercept(name = "add", multiplePercepts = true, multipleArguments = false)
     public int add() {
         return default_pin;
+    }
+
+    /**
+     *
+     * @return
+     */
+    @AsPercept(name = "on", multiplePercepts = true, multipleArguments = false)
+    public List<List<String>> on() {
+        List<List<String>> list = new ArrayList<List<String>>();
+
+//        for ( true ) { /* All pins/discs */
+//            // Send percepts
+//        }
+
+        return list;
     }
 
     /**
@@ -154,7 +174,6 @@ class Entity {
     @AsAction(name = "add")
     public void addDisc(int disc, int p) throws ActException {
         game.addDisc(disc, p);
-        discs++;
     }
 
     /**
