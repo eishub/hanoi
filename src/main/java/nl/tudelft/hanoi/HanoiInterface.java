@@ -3,14 +3,13 @@ package nl.tudelft.hanoi;
 import eis.eis2java.annotation.AsAction;
 import eis.eis2java.annotation.AsPercept;
 import eis.eis2java.environment.AbstractEnvironment;
-import eis.exceptions.*;
+import eis.exceptions.ActException;
+import eis.exceptions.EntityException;
+import eis.exceptions.ManagementException;
 import eis.iilang.Action;
-import eis.iilang.Identifier;
 import eis.iilang.Parameter;
-import eis.iilang.Percept;
 import hanoi.gui.Towers;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,6 +37,13 @@ public class HanoiInterface extends AbstractEnvironment {
      */
     public void init(Map<String, Parameter> parameters) throws ManagementException {
         super.init(parameters);
+
+        // Setup the game. Add four discs.
+        // TODO: Dynamically create world.
+        game.addDisc(1, 0);
+        game.addDisc(2, 0);
+        game.addDisc(3, 0);
+        game.addDisc(4, 0);
 
         // Try registering the Entity.
         try {
