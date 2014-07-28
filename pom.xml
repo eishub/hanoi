@@ -27,6 +27,18 @@
 
     <build>
         <plugins>
+        	<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-jar-plugin</artifactId>
+        		<configuration>
+          			<archive>
+            			<manifest>
+              				<addClasspath>true</addClasspath>
+              				<mainClass>eisinterface.HanoiInterface</mainClass>
+            			</manifest>
+          			</archive>
+        		</configuration>
+			</plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -57,12 +69,12 @@
         </plugins>
     </build>
 
-    <repositories>
-        <repository>
-            <id>ii.tudelft.nl</id>
-            <url>https://ii.tudelft.nl/maven</url>
+    <repositories>		
+		<repository>
+            <id>eis-releases</id>
+            <url>https://raw.github.com/eishub/eis/releases/</url>
         </repository>
-    </repositories>
+	</repositories>
 
 
     <dependencies>
