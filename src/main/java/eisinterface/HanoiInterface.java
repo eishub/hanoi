@@ -19,7 +19,7 @@ import java.util.Map;
 @SuppressWarnings("serial")
 public class HanoiInterface extends AbstractEnvironment {
 
-	public Towers game = null;
+	private Towers game = null;
 
     /**
      * Constructor for the Hanoi Interface.

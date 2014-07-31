@@ -16,15 +16,6 @@
         </license>
     </licenses>
 
-    <developers>
-        <developer>
-            <name>S.Y. van den Oever</name>
-            <email>S.Y.vandenOever@student.TUDelft.nl</email>
-            <organization>TU Delft</organization>
-            <organizationUrl>http://www.tudelft.nl</organizationUrl>
-        </developer>
-    </developers>
-
     <build>
         <plugins>
         	<plugin>
@@ -85,9 +76,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>apleis</groupId>
+            <groupId>eishub</groupId>
             <artifactId>eis</artifactId>
-            <version>0.3</version>
+            <version>0.4</version>
         </dependency>
     </dependencies>
 </project>
