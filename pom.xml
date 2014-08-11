@@ -2,34 +2,119 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>nl.tudelft.hanoi</groupId>
+    <groupId>eishub</groupId>
     <artifactId>hanoi</artifactId>
-    <version>1.0.0</version>
+    <version>${version}</version>
     <name>hanoi</name>
-    <description>Simple Hanoi implementation.</description>
-    <url>http://github.com/eishub/hanoi</url>
+    <description>A simple implementation of the Hanoi game (See http://wikipedia.org/wiki/Hanoi)</description>
+    <url>http://www.github.com/eishub/hanoi</url>
 
     <licenses>
         <license>
-            <name>GNU General Public License (GPL)</name>
+            <name>GNU General Public License</name>
             <url>http://www.gnu.org/licenses/gpl.html</url>
         </license>
     </licenses>
 
+    <organization>
+        <name>eishub</name>
+        <url>http://github.com/eishub</url>
+    </organization>
+
+    <properties>
+        <version>1.0.0</version>
+        <main.class>HanoiEnvironmentInterface</main.class>
+        <main.class.package>eishanoi</main.class.package>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <github.global.server>github</github.global.server>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>eishub</id>
+            <url>http://raw.github.com/eishub/mvn-repo/master</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>eishub</groupId>
+            <artifactId>eis</artifactId>
+            <version>0.4</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <scm>
+        <connection>scm:git:http://github.com/eishub/hanoi.git</connection>
+    </scm>
+
     <build>
+        <finalName>${project.artifactId}-${project.version}-r${buildNumber}</finalName>
         <plugins>
-        	<plugin>
-        		<groupId>org.apache.maven.plugins</groupId>
-        		<artifactId>maven-jar-plugin</artifactId>
-        		<configuration>
-          			<archive>
-            			<manifest>
-              				<addClasspath>true</addClasspath>
-              				<mainClass>eisinterface.HanoiInterface</mainClass>
-            			</manifest>
-          			</archive>
-        		</configuration>
-			</plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>1.3</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <doCheck>true</doCheck>
+                    <doUpdate>true</doUpdate>
+                    <format>{0,date,yyyy-MM-dd}</format>
+                    <items>
+                        <item>timestamp</item>
+                    </items>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.5</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>${main.class.package}.${main.class}</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <id>hanoi</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <archive>
+                                <manifest>
+                                    <addClasspath>true</addClasspath>
+                                    <mainClass>${main.class.package}.${main.class}</mainClass>
+                                </manifest>
+                            </archive>
+                            <classifier>hanoi</classifier>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -58,27 +143,6 @@
                 </executions>
             </plugin>
         </plugins>
+
     </build>
-
-    <repositories>		
-		<repository>
-            <id>eis-releases</id>
-            <url>https://raw.github.com/eishub/eis/releases/</url>
-        </repository>
-	</repositories>
-
-
-    <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.8.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>eishub</groupId>
-            <artifactId>eis</artifactId>
-            <version>0.4</version>
-        </dependency>
-    </dependencies>
 </project>
