@@ -23,6 +23,7 @@ import java.util.Map;
 @SuppressWarnings("serial")
 public class HanoiInterface extends AbstractEnvironment {
 
+
 	private Towers game = null;
 
     /**
@@ -36,8 +37,6 @@ public class HanoiInterface extends AbstractEnvironment {
      * @throws ManagementException
      */
     public void init(Map<String, Parameter> parameters) throws ManagementException {
-        super.init(parameters);
-
         // Setup the game. Add four discs.
         // TODO: Dynamically create world.
         game.addDisc(1, 0);
@@ -45,13 +44,13 @@ public class HanoiInterface extends AbstractEnvironment {
         game.addDisc(3, 0);
         game.addDisc(4, 0);
 
-        // Try creating and registering an entity called gripper.
         reset(parameters);
 
+        // Try creating and registering an entity.
         try {
             registerEntity("entity", new Entity(game));
         } catch (EntityException e) {
-        	throw new ManagementException("Could not create a gripper", e);
+        	throw new ManagementException("Could not create an entity", e);
         }
     }
     
