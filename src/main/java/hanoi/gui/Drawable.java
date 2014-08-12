@@ -4,7 +4,7 @@ import hanoi.gui.Towers;
 
 import java.awt.*;
 
-class Drawable extends Canvas {
+public class Drawable extends Canvas {
 
     Towers window;
 
@@ -56,7 +56,7 @@ class Drawable extends Canvas {
     /**
      * All things paintable.
      */
-    Block[] things;
+    public Block[] things;
 
     /**
      * Adding to the paintables.
@@ -86,7 +86,7 @@ class Drawable extends Canvas {
     /**
      * A filled rectangle .
      */
-    abstract class Block {
+    public abstract class Block {
 
         int x;
         int y;
@@ -122,7 +122,7 @@ class Drawable extends Canvas {
 
     }
 
-    class Foundation extends Block {
+    public class Foundation extends Block {
 
         Foundation(Color c) {
             super(c);
@@ -138,7 +138,7 @@ class Drawable extends Canvas {
 
     }
 
-    class Pin extends Block {
+    public class Pin extends Block {
         int i = -1;
 
         Pin(int i, Color c) {
@@ -156,16 +156,16 @@ class Drawable extends Canvas {
 
     }
 
-    class Disc extends Block {
+    public class Disc extends Block {
 
-        int target;
+        public int target;
         int target_x;
         int target_y;
 
-        int pin;
-        int number;
-        int lvl;
-        Disc next;
+        public int pin;
+        public int number;
+        public int lvl;
+        public Disc next;
 
         /**
          * Take a Disc off a pin.
@@ -306,7 +306,7 @@ class Drawable extends Canvas {
         }
     }
 
-    class MovingDisc {
+    public class MovingDisc {
 
         int from;
         int target;
@@ -351,7 +351,7 @@ class Drawable extends Canvas {
      *
      * @param w the game to be drawn.
      */
-    Drawable(Towers w) {
+    public Drawable(Towers w) {
         window = w;
         setSize(WIDTH, HEIGHT);
         setup();

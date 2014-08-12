@@ -38,4 +38,12 @@ public class Towers extends Frame {
 	public void moveDisc (int disc, int to) {
 		canvas.moveDisc(disc, to);
 	}
+
+    public Drawable getCanvas() {
+        return canvas;
+    }
+
+    public Drawable.Disc[] getPins() {
+        return canvas.pins;
+    }
 }
