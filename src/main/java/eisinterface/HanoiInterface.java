@@ -29,15 +29,9 @@ public class HanoiInterface extends AbstractEnvironment {
     private Drawable gui = null;
 
     /**
-     * Constructor for the Hanoi Interface.
-     */
-    public HanoiInterface() throws ManagementException {
-    }
-
-    /**
      * Initializes and registers an Entity.
      *
-     * @param parameters
+     * @param parameters parameters for initialization.
      * @throws ManagementException
      */
     public void init(Map<String, Parameter> parameters) throws ManagementException {
@@ -144,7 +138,7 @@ class Entity {
     }
 
     /**
-     * @return
+     * @return returns a list with all discs with their pins, and the discs below them.
      */
     @AsPercept(name = "on", multiplePercepts = true, multipleArguments = true)
     public List<List<Integer>> onPin() {
@@ -153,12 +147,17 @@ class Entity {
         for (Drawable.Disc disc : game.getPins()) {
             List<Integer> props = new ArrayList<Integer>();
 
+            // Add Disc information (name and position).
             props.add(disc.number);
             props.add(disc.pin);
 
             if (disc.next != null) {
+                // Indicates the Disc below the current one.
                 props.add(disc.next.number);
-                // TODO: If there's no disc, maybe insert a 0 instead to keep the percept on\3?
+            } else {
+                // Add zero to indicate the next 'Disc' is the foundation.
+                // A disc with identifier 0 can _NOT_ exist.
+                props.add(0);
             }
 
             list.add(props);
