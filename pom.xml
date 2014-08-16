@@ -4,7 +4,7 @@
 
     <groupId>eishub</groupId>
     <artifactId>hanoi</artifactId>
-    <version>${version}</version>
+    <version>1.0.0</version>
     <name>hanoi</name>
     <description>A simple implementation of the Hanoi game (See http://wikipedia.org/wiki/Hanoi)</description>
     <url>http://www.github.com/eishub/hanoi</url>
@@ -23,8 +23,8 @@
 
     <properties>
         <version>1.0.0</version>
-        <main.class>HanoiEnvironmentInterface</main.class>
-        <main.class.package>eishanoi</main.class.package>
+        <main.class>HanoiInterface</main.class>
+        <main.class.package>eisinterface</main.class.package>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <github.global.server>github</github.global.server>
     </properties>

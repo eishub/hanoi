@@ -1,19 +1,14 @@
 package eisinterface;
 
-import eis.eis2java.annotation.AsAction;
-import eis.eis2java.annotation.AsPercept;
 import eis.eis2java.environment.AbstractEnvironment;
-import eis.exceptions.ActException;
 import eis.exceptions.EntityException;
 import eis.exceptions.ManagementException;
 import eis.iilang.Action;
 import eis.iilang.EnvironmentState;
 import eis.iilang.Parameter;
-import hanoi.gui.Towers;
 import hanoi.gui.Drawable;
+import hanoi.gui.Towers;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,14 +30,15 @@ public class HanoiInterface extends AbstractEnvironment {
      * @throws ManagementException
      */
     public void init(Map<String, Parameter> parameters) throws ManagementException {
+        // Prepare the game.
+        reset(parameters);
+
         // Setup the game. Add four discs.
         // TODO: Dynamically create world.
         game.addDisc(1, 0);
         game.addDisc(2, 0);
         game.addDisc(3, 0);
         game.addDisc(4, 0);
-
-        reset(parameters);
 
         // Try creating and registering an entity.
         try {
@@ -85,7 +81,8 @@ public class HanoiInterface extends AbstractEnvironment {
         if (game != null) {
             gui.things = null;
             game.removeAll(); // TODO: does this clean up all gui components correctly?
-            gui = null; game = null;
+            gui = null;
+            game = null;
         }
         setState(EnvironmentState.KILLED);
     }
@@ -114,79 +111,5 @@ public class HanoiInterface extends AbstractEnvironment {
     @Override
     protected boolean isSupportedByType(Action action, String type) {
         return isSupportedByEnvironment(action);
-    }
-}
-
-class Entity {
-
-    private Towers game;
-    private int default_pin;
-
-    public Entity(Towers game) {
-        this.game = game;
-        this.default_pin = 0;
-    }
-
-    /**
-     * Percept send when a Disc is added.
-     *
-     * @return position of Disc
-     */
-    @AsPercept(name = "add", multiplePercepts = true, multipleArguments = false)
-    public int add() {
-        return default_pin;
-    }
-
-    /**
-     * @return returns a list with all discs with their pins, and the discs below them.
-     */
-    @AsPercept(name = "on", multiplePercepts = true, multipleArguments = true)
-    public List<List<Integer>> onPin() {
-        List<List<Integer>> list = new ArrayList<List<Integer>>();
-
-        for (Drawable.Disc disc : game.getPins()) {
-            List<Integer> props = new ArrayList<Integer>();
-
-            // Add Disc information (name and position).
-            props.add(disc.number);
-            props.add(disc.pin);
-
-            if (disc.next != null) {
-                // Indicates the Disc below the current one.
-                props.add(disc.next.number);
-            } else {
-                // Add zero to indicate the next 'Disc' is the foundation.
-                // A disc with identifier 0 can _NOT_ exist.
-                props.add(0);
-            }
-
-            list.add(props);
-        }
-
-        return list;
-    }
-
-
-
-    /**
-     * Support function to add a disc.
-     *
-     * @param disc disc number to add.
-     * @param p    pin to add the disc to.
-     */
-    @AsAction(name = "add")
-    public void addDisc(int disc, int p) throws ActException {
-        game.addDisc(disc, p);
-    }
-
-    /**
-     * Support function to move a disc.
-     *
-     * @param disc disc to be moved.
-     * @param to   pin to move the disc to.
-     */
-    @AsAction(name = "move")
-    public void moveDisc(int disc, int to) {
-        game.moveDisc(disc, to);
     }
 }
