@@ -3,12 +3,12 @@ package eisinterface;
 import eis.eis2java.environment.AbstractEnvironment;
 import eis.exceptions.EntityException;
 import eis.exceptions.ManagementException;
-import eis.iilang.Action;
-import eis.iilang.EnvironmentState;
-import eis.iilang.Parameter;
+import eis.iilang.*;
 import hanoi.gui.Drawable;
 import hanoi.gui.Towers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,13 +33,6 @@ public class HanoiInterface extends AbstractEnvironment {
         // Prepare the game.
         reset(parameters);
 
-        // Setup the game. Add four discs.
-        // TODO: Dynamically create world.
-        game.addDisc(1, 0);
-        game.addDisc(2, 0);
-        game.addDisc(3, 0);
-        game.addDisc(4, 0);
-
         // Try creating and registering an entity.
         try {
             registerEntity("entity", new Entity(game));
@@ -61,16 +54,40 @@ public class HanoiInterface extends AbstractEnvironment {
     public void reset(Map<String, Parameter> parameters)
             throws ManagementException {
 
-        if (game != null) {
-            // Dispose the current game
-            gui.things = null; // TODO: necessary or not?
-            game.dispose();
-            game = null;
+        // Build the world based on the provided parameters.
+        List<Integer> start = new ArrayList<Integer>();
+        Parameter p = parameters.get("discs");
+
+        // Prepare game initialisation data.
+        if (p != null) {
+            if (p instanceof ParameterList) {
+                ParameterList list = (ParameterList) p;
+                for (Parameter x : list) {
+                    // Check for valid parameters and add them to the list.
+                    if (!(x instanceof Numeral)) {
+                        throw new IllegalArgumentException("Numbers expected but found " + x);
+                    }
+                    start.add(((Numeral) x).getValue().intValue());
+                }
+            } else {
+                throw new IllegalArgumentException("Expected a list of positions or nothing but found " + p);
+            }
+        } else {
+            // Use default setup with 4 discs.
+            start.add(0);
+            start.add(0);
+            start.add(0);
+            start.add(0); // All discs positioned on the first tower (0).
         }
 
-        // Create a game instance
-        game = new Towers("Testing through EIS");
-        gui = game.getCanvas();
+        // Instantiate the game.
+        if (game == null) {
+            game = new Towers("Hanoi Towers Game", start);
+        } else {
+            game.reset(start);
+        }
+
+        // Make the game-window visible.
         game.setVisible(true);
 
         setState(EnvironmentState.PAUSED);
