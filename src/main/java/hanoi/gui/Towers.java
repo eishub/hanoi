@@ -51,8 +51,10 @@ public class Towers extends Frame {
             return;
         }
 
-        canvas.things = null;
-        remove(canvas);
+        if (canvas != null) {
+            canvas.things = null;
+            remove(canvas);
+        }
         add(canvas = new Drawable(this));
 
         pack();
