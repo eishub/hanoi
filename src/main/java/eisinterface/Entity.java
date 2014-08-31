@@ -2,6 +2,7 @@ package eisinterface;
 
 import eis.eis2java.annotation.AsAction;
 import eis.eis2java.annotation.AsPercept;
+import eis.exceptions.ActException;
 import hanoi.gui.Drawable;
 import hanoi.gui.Towers;
 
@@ -24,6 +25,7 @@ public class Entity {
     }
 
     /**
+     * TODO: Send this percept only on initialization.
      * @return Returns a list of the current discs in the game and their levels.
      */
     @AsPercept(name = "disc", multiplePercepts = true, multipleArguments = true)
@@ -87,6 +89,8 @@ public class Entity {
      */
     @AsAction(name = "move")
     public void moveDisc(int disc, int to) {
-        game.moveDisc(disc, to);
+        if (to < game.getPins().length) {
+            game.moveDisc(3, 1);
+        }
     }
 }
