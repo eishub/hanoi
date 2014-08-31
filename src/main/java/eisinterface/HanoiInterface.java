@@ -96,7 +96,7 @@ public class HanoiInterface extends AbstractEnvironment {
     @Override
     public void kill() throws ManagementException {
         if (game != null) {
-            gui.things = null;
+//            gui.things = null;
             game.removeAll(); // TODO: does this clean up all gui components correctly?
             gui = null;
             game = null;
