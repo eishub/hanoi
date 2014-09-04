@@ -86,11 +86,17 @@ public class Entity {
      *
      * @param disc disc to be moved.
      * @param to   pin to move the disc to.
+     *
+     * TODO pins[to] possible out of bounds
      */
     @AsAction(name = "move")
     public void moveDisc(int disc, int to) {
-        if (to < game.getPins().length) {
-            game.moveDisc(3, 1);
+        Drawable.Disc[] pins = game.getPins();
+        if (to < pins.length && game.discExists(disc)) {
+            // Passed security check, disc exists, now compare discs.
+            if (pins[to] == null /*|| (game.getDisc(disc).lvl < pins[to].lvl)*/) {
+                game.moveDisc(disc, to);
+            }
         }
     }
 }

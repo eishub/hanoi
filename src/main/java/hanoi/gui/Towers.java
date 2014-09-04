@@ -108,4 +108,35 @@ public class Towers extends Frame {
     public Drawable.Disc[] getPins() {
         return canvas.pins;
     }
+
+    /**
+     * Returns true if the disc exists, and false otherwise.
+     *
+     * @param disc disc to be checked for existence.
+     * @return boolean result
+     */
+    public boolean discExists(int disc) {
+        try {
+            getDisc(disc);
+        } catch (IndexOutOfBoundsException e) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Returns the Disc object associated with the given identifier.
+     *
+     * @param disc identifier of the disc to be retrieved.
+     * @return the Disc object
+     * @throws IndexOutOfBoundsException if the disc does not exist.
+     */
+    public Drawable.Disc getDisc(int disc) throws IndexOutOfBoundsException {
+        Drawable.Disc[] pins = getPins();
+        for (Drawable.Disc d : pins) {
+            if (d.number == disc)
+                return d;
+        }
+        throw new IndexOutOfBoundsException("Disc not found");
+    }
 }
