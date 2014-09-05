@@ -50,6 +50,15 @@ public class Entity {
     }
 
     /**
+     * TODO: Send only on initialization.
+     * @return returns a percept indicating the amount of pins.
+     */
+    @AsPercept(name = "pins")
+    public int pins() {
+        return game.getPins().length;
+    }
+
+    /**
      * @return returns a list with all discs with their pins, and the discs below them.
      */
     @AsPercept(name = "on", multiplePercepts = true, multipleArguments = true)
