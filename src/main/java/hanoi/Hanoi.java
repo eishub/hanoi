@@ -5,7 +5,7 @@ import hanoi.gui.Towers;
 public class Hanoi {
 
 	public static void main(String[] args) {
-	    Towers window = new Towers("The Hanoi Puzzle");
+	    Towers window = new Towers("The Hanoi Puzzle", null);
         window.setVisible(true);
         
         window.addDisc(1,0);

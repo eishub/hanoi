@@ -2,366 +2,141 @@ package hanoi.gui;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the main window.
  */
 public class Towers extends Frame {
 
-	public static void main (String[] arg) {
-		new Towers("Testing").setVisible(true);
-	}
+    public static void main(String[] arg) {
+        new Towers("Testing", null).setVisible(true);
+    }
 
-	Drawable canvas;
+    Drawable canvas;
 
-	public Towers (String title) {
-		super(title);
-		add(canvas = new Drawable(this));
+    /**
+     * General constructor for the Towers game.
+     *
+     * @param title title of the frame
+     * @param list  list of startpositions for the discs. Discs will be numbered automatically.
+     */
+    public Towers(String title, List<Integer> list) {
+        super(title);
+//		add(canvas = new Drawable(this));
 
-		addWindowListener(new WindowAdapter() {
-			public void windowClosing (WindowEvent e) {
-				System.exit(0);
-			}
-		});
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                System.exit(0);
+            }
+        });
+        reset(list);
+        pack();
+    }
 
-		pack();
-	}
+    /**
+     * Resets the game to a given start situation.
+     *
+     * @param list list of startpositions for the discs. Discs will be numbered automatically.
+     */
+    public void reset(List<Integer> list) {
+        if (list == null) {
+            reset(new ArrayList<Integer>() {{
+                add(0);
+                add(0);
+                add(0);
+                add(0);
+            }});
+            return;
+        }
 
-	public void paint (Graphics g) {
-		canvas.paint(g);
-	}
+        if (canvas != null) {
+            canvas.things = null;
+            remove(canvas);
+        }
+        add(canvas = new Drawable(this));
 
-	public void addDisc (int disc, int p) {
-		canvas.addDisc(disc, p);
-	}
+        pack();
 
-	public void moveDisc (int disc, int to) {
-		canvas.moveDisc(disc, to);
-	}
-}
+        // Draw the first discs.
+        int disc = 1; // Name of the first disc.
+        for (Integer x : list) {
+            addDisc(disc, x.intValue());
+            disc++;
+        }
+    }
 
-class Drawable extends Canvas {
+    public void paint(Graphics g) {
+        canvas.paint(g);
+    }
 
-	Towers window;
+    /**
+     * Function to add a disc to the game.
+     *
+     * @param disc disc number / identifier.
+     * @param p    position of the disc to be drawn.
+     */
+    public void addDisc(int disc, int p) {
+        canvas.addDisc(disc, p);
+    }
 
-	/**
-	 * Main window size.
-	 */
-	static int WIDTH = 300;
-	static int HEIGHT = 200;
+    /**
+     * Move the given disc to a given destination if it's on top of the origin tower.
+     *
+     * @param disc disc identifier
+     * @param to   destination tower
+     */
+    public void moveDisc(int disc, int to) {
+        canvas.moveDisc(disc, to);
+    }
 
-	/**
-	 * The module width of the largest disc.
-	 */
-	static int LARGEST = 9;
-	static int BORDER = 10;
+    /**
+     * Make the canvas accessible from the outside.
+     *
+     * @return the current canvas object.
+     */
+    public Drawable getCanvas() {
+        return canvas;
+    }
 
-	static int MODULE_WIDTH;
-	static int MODULE_HEIGHT;
-	static int VERTICAL_BASE;
-	static int GAP;
+    /**
+     * Returns the pins as they are.
+     *
+     * @return Array containing all the information about the pins.
+     */
+    public Drawable.Disc[] getPins() {
+        return canvas.pins;
+    }
 
-	boolean resized = true;
-	int dx = 0;
-	int dy = 0;
-	int[] center = new int[3];
-	int PIN_HEIGHT;
+    /**
+     * Returns true if the disc exists, and false otherwise.
+     *
+     * @param disc disc to be checked for existence.
+     * @return boolean result
+     */
+    public boolean discExists(int disc) {
+        try {
+            getDisc(disc);
+        } catch (IndexOutOfBoundsException e) {
+            return false;
+        }
+        return true;
+    }
 
-	synchronized void setup () {
-		Dimension d = getSize();
-		if (d.width != WIDTH || d.height != HEIGHT) {
-			dx = d.width - WIDTH;
-			dy = d.height - HEIGHT;
-			WIDTH = d.width;
-			HEIGHT = d.height;
-			resized = true;
-		}
-
-		MODULE_WIDTH = (WIDTH - 2 * BORDER) / (6 * (LARGEST + 1) + 6);
-		MODULE_HEIGHT = (HEIGHT - 2 * BORDER) / (2 * LARGEST);
-		VERTICAL_BASE = HEIGHT - (LARGEST + 4) * MODULE_HEIGHT;
-		GAP = WIDTH - (6 * (LARGEST + 1) + 6) * MODULE_WIDTH;
-		GAP /= 2;
-
-		center[0] = offset(1) + GAP + MODULE_WIDTH;
-		center[1] = center[0] + 2 * offset(1) + MODULE_WIDTH;
-		center[2] = center[1] + 2 * offset(1) + MODULE_WIDTH;
-		PIN_HEIGHT = (LARGEST + 2) * MODULE_HEIGHT;
-	}
-
-	/**
-	 * All things paintable.
-	 */
-	Block[] things;
-
-	/**
-	 * Adding to the paintables.
-	 */
-	void addThing (Block p) {
-		int size = (things == null) ? 0 : things.length;
-		Block[] tmp = new Block[size + 1];
-		for (int i = 0; i < size; i++)
-			tmp[i] = things[i];
-		tmp[size] = p;
-		things = tmp;
-		repaint(p.x, p.y, p.w, p.h);
-	}
-
-	/**
-	 * The painting callback. Translates into similar painting
-	 * callbacks to all things paintable.
-	 */
-	public void paint (Graphics g) {
-		if (things == null)
-			return;
-		for (Block thing : things)
-			thing.paint(g);
-		resized = false;
-	}
-
-	/**
-	 * A filled rectangle .
-	 */
-	abstract class Block {
-
-		int x;
-		int y;
-		int w;
-		int h;
-		Color color;
-		boolean painted = false;
-
-		Block (Color c) {
-			color = c;
-		}
-
-		protected void paint (Graphics g) {
-			synchronized (this) {
-				g.setColor(color);
-				g.fillRect(x, y, w, h);
-				painted = true;
-				notifyAll();
-			}
-		}
-
-		void waitPainted () // Called within synchronized block
-		{
-			painted = false;
-			while (!painted) {
-				try {
-					wait();
-				} catch (InterruptedException e) {
-					// TODO
-				}
-			}
-		}
-
-	}
-
-	class Foundation extends Block {
-
-		Foundation (Color c) {
-			super(c);
-			setup();
-		}
-
-		protected void setup () {
-			x = GAP;
-			y = VERTICAL_BASE + PIN_HEIGHT;
-			w = WIDTH - 2 * GAP;
-			h = MODULE_HEIGHT;
-		}
-
-	}
-
-	class Pin extends Block {
-		int i = -1;
-
-		Pin (int i, Color c) {
-			super(c);
-			this.i = i;
-			setup();
-		}
-
-		protected void setup () {
-			x = center[i] - MODULE_WIDTH;
-			y = VERTICAL_BASE;
-			w = 2 * MODULE_WIDTH;
-			h = PIN_HEIGHT;
-		}
-
-	}
-
-	class Disc extends Block {
-
-		int target;
-		int target_x;
-		int target_y;
-
-		int pin;
-		int number;
-		int lvl;
-		Disc next;
-
-		synchronized void pickUp (int t) {
-			target = t;
-			target_x = xpos(target, number);
-			pins[pin] = next;
-			pin = -1;
-		}
-
-		synchronized void putDown (int p) {
-			lvl = level(p);
-			next = pins[p];
-			pins[p] = this;
-			pin = p;
-		}
-
-		protected void setup () {
-			target_x = xpos(target, number);
-			if (pin != -1) {
-				x = xpos(pin, number);
-				y = VERTICAL_BASE + lvl * MODULE_HEIGHT;
-			} else {
-				// Use dx instead
-				x *= WIDTH / (WIDTH - dx);
-				y *= HEIGHT / (HEIGHT - dy);
-			}
-			w = offset(number) * 2;
-			h = MODULE_HEIGHT;
-		}
-
-		Disc (int num, int p) {
-			super(Color.black);
-			number = num;
-			pin = p;
-			lvl = level(p);
-			next = pins[p];
-			pins[p] = this;
-			setup();
-		}
-
-		void move (int dx, int dy) {
-			synchronized (this) {
-				repaint(x, y, w, h);
-				x += dx;
-				y += dy;
-				repaint(x, y, w, h);
-				waitPainted();
-			}
-			try {
-				Thread.sleep(10); // slow down
-			} catch (InterruptedException e) {
-				// TODO
-			}
-		}
-	}
-
-	Disc[] pins = new Disc[3];
-
-	/**
-	 * Returns the next free module level on a pin.
-	 */
-	int level (int p) {
-		return (pins[p] == null) ? (LARGEST + 1) : pins[p].lvl - 1;
-	}
-
-	/**
-	 * Returns a width pixel offset for a given disc.
-	 */
-	int offset (int num) {
-		return MODULE_WIDTH * (LARGEST - num + 2);
-	}
-
-	/**
-	 * Returns the home point x coordinate for a given disc on a given
-	 * pin.
-	 */
-	int xpos (int p, int num) {
-		return center[p] - offset(num);
-	}
-
-	/**
-	 * Returns the home point y coordinate for a given disc on a given
-	 * pin.
-	 */
-	int ypos (int p) {
-		return VERTICAL_BASE + level(p) * MODULE_HEIGHT;
-	}
-
-	public void addDisc (int disc, int p) {
-		if (disc < 1)
-			return;
-		if (p < 0 || p > 2)
-			return;
-		addThing(new Disc(disc, p));
-	}
-
-	public void moveDisc (int disc, int to) {
-		for (int from = 0; from < 3; from++) {
-			if (to == from)
-				continue;
-			if (pins[from] == null)
-				continue;
-			Disc d = pins[from];
-			if (d.number == disc) {
-				new MovingDisc(from, to).action();
-			}
-		}
-	}
-
-	class MovingDisc {
-
-		int from;
-		int target;
-
-		MovingDisc (int f, int to) {
-			from = f;
-			target = to;
-		}
-
-		protected void action () {
-			System.out.println("moving from " + from + " to " + target);
-
-			// Remove from pin
-			Disc disc = pins[from];
-			synchronized (Drawable.this) {
-				disc.pickUp(target);
-
-				// Lift disc up above pins
-				while (disc.y > VERTICAL_BASE - 2 * MODULE_HEIGHT)
-					disc.move(0, -MODULE_HEIGHT);
-
-				// Shift to target pin
-				int dir = (from < target) ? MODULE_WIDTH : -MODULE_WIDTH;
-				while (disc.x != disc.target_x)
-					disc.move(dir, 0);
-
-				// Sink down
-				disc.target_y = ypos(target);
-
-				while (disc.y < disc.target_y)
-					disc.move(0, MODULE_HEIGHT);
-
-				disc.putDown(target);
-				System.out.println("done moving from " + from + " to " + target);
-			}
-		}
-	}
-
-	Drawable (Towers w) {
-		window = w;
-		setSize(WIDTH, HEIGHT);
-		setup();
-
-		// set background white.
-		setBackground(Color.white);
-
-		// Foundation
-		addThing(new Foundation(Color.orange));
-
-		// Pins
-		for (int i = 0; i < 3; i++)
-			addThing(new Pin(i, Color.orange));
-	}
+    /**
+     * Returns the Disc object associated with the given identifier.
+     *
+     * @param disc identifier of the disc to be retrieved.
+     * @return the Disc object
+     * @throws IndexOutOfBoundsException if the disc does not exist.
+     */
+    public Drawable.Disc getDisc(int disc) throws IndexOutOfBoundsException {
+        Drawable.Disc[] pins = getPins();
+        for (Drawable.Disc d : pins) {
+            if (d.number == disc)
+                return d;
+        }
+        throw new IndexOutOfBoundsException("Disc not found");
+    }
 }
