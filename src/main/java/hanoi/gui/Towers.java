@@ -130,12 +130,16 @@ public class Towers extends Frame {
      * @param disc identifier of the disc to be retrieved.
      * @return the Disc object
      * @throws IndexOutOfBoundsException if the disc does not exist.
+     *
+     * TODO Should this be an ActException instead?
      */
     public Drawable.Disc getDisc(int disc) throws IndexOutOfBoundsException {
         Drawable.Disc[] pins = getPins();
         for (Drawable.Disc d : pins) {
-            if (d.number == disc)
-                return d;
+            if (d != null) {
+                if (d.number == disc)
+                    return d;
+            }
         }
         throw new IndexOutOfBoundsException("Disc not found");
     }
