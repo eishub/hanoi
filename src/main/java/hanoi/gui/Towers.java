@@ -1,5 +1,8 @@
 package hanoi.gui;
 
+import com.sun.javaws.exceptions.InvalidArgumentException;
+import eis.exceptions.ActException;
+
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -25,12 +28,10 @@ public class Towers extends Frame {
         canvas.addDisc(disc, p);
     }
 
-    public void moveDisc(int disc, int to) {
+    public void moveDisc(int disc, int to) throws ActException {
         if (validMove(disc, to)) {
             canvas.moveDisc(disc, to);
-        } else {
-            System.out.println("Invalid move!");
-        }
+        } else throw new ActException("Invalid move!");
 
     }
 
@@ -69,9 +70,10 @@ public class Towers extends Frame {
         if (getPins() != null) {
             Drawable.Disc[] pins = getPins();
             for (Drawable.Disc d : pins) {
-                if (d != null) {
+                while (d != null) {
                     if (d.number == disc)
                         return true;
+                    d = d.next;
                 }
             }
         }
