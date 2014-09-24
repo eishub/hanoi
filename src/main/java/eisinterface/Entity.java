@@ -2,6 +2,7 @@ package eisinterface;
 
 import eis.eis2java.annotation.AsAction;
 import eis.eis2java.annotation.AsPercept;
+import eis.exceptions.ActException;
 import hanoi.gui.Drawable;
 import hanoi.gui.Towers;
 
@@ -97,13 +98,11 @@ public class Entity {
      * TODO pins[to] possible out of bounds
      */
     @AsAction(name = "move")
-    public void moveDisc(int disc, int to) {
-        Drawable.Disc[] pins = model.getPins();
-        if (to < pins.length && model.discExists(disc)) {
-            // Passed security check, disc exists, now compare discs.
-            if (pins[to] == null /*|| (model.getDisc(disc).lvl < pins[to].lvl)*/) {
-                model.moveDisc(disc, to);
-            }
+    public void moveDisc(int disc, int to) throws ActException {
+        if (model.discExists(disc)) {
+            return;
+        } else {
+            throw new IllegalArgumentException("Disc does not exist.");
         }
     }
 }
