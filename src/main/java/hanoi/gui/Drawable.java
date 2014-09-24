@@ -1,7 +1,5 @@
 package hanoi.gui;
 
-import hanoi.gui.Towers;
-
 import java.awt.*;
 
 public class Drawable extends Canvas {
@@ -56,7 +54,7 @@ public class Drawable extends Canvas {
     /**
      * All things paintable.
      */
-    public Block[] things;
+    Block[] things;
 
     /**
      * Adding to the paintables.
@@ -78,15 +76,15 @@ public class Drawable extends Canvas {
     public void paint(Graphics g) {
         if (things == null)
             return;
-        for (Block thing : things)
-            thing.paint(g);
+        for (int i = 0; i < things.length; i++)
+            things[i].paint(g);
         resized = false;
     }
 
     /**
      * A filled rectangle .
      */
-    public abstract class Block {
+    abstract class Block {
 
         int x;
         int y;
@@ -115,14 +113,13 @@ public class Drawable extends Canvas {
                 try {
                     wait();
                 } catch (InterruptedException e) {
-                    // TODO
                 }
             }
         }
 
     }
 
-    public class Foundation extends Block {
+    class Foundation extends Block {
 
         Foundation(Color c) {
             super(c);
@@ -138,7 +135,7 @@ public class Drawable extends Canvas {
 
     }
 
-    public class Pin extends Block {
+    class Pin extends Block {
         int i = -1;
 
         Pin(int i, Color c) {
@@ -158,7 +155,7 @@ public class Drawable extends Canvas {
 
     public class Disc extends Block {
 
-        public int target;
+        int target;
         int target_x;
         int target_y;
 
@@ -167,11 +164,6 @@ public class Drawable extends Canvas {
         public int lvl;
         public Disc next;
 
-        /**
-         * Take a Disc off a pin.
-         *
-         * @param t 
-         */
         synchronized void pickUp(int t) {
             target = t;
             target_x = xpos(target, number);
@@ -186,9 +178,6 @@ public class Drawable extends Canvas {
             pin = p;
         }
 
-        /**
-         * Setup the disc.
-         */
         protected void setup() {
             target_x = xpos(target, number);
             if (pin != -1) {
@@ -203,12 +192,6 @@ public class Drawable extends Canvas {
             h = MODULE_HEIGHT;
         }
 
-        /**
-         * Constructor for disc.
-         *
-         * @param num disc identifier
-         * @param p   destination pin
-         */
         Disc(int num, int p) {
             super(Color.black);
             number = num;
@@ -219,12 +202,6 @@ public class Drawable extends Canvas {
             setup();
         }
 
-        /**
-         * Move a Disc
-         *
-         * @param dx delta x position
-         * @param dy delta y position
-         */
         void move(int dx, int dy) {
             synchronized (this) {
                 repaint(x, y, w, h);
@@ -236,12 +213,11 @@ public class Drawable extends Canvas {
             try {
                 Thread.sleep(10); // slow down
             } catch (InterruptedException e) {
-                // TODO
             }
         }
     }
 
-    public Disc[] pins = new Disc[3];
+    Disc[] pins = new Disc[3];
 
     /**
      * Returns the next free module level on a pin.
@@ -269,16 +245,10 @@ public class Drawable extends Canvas {
      * Returns the home point y coordinate for a given disc on a given
      * pin.
      */
-    int ypos(int p) {
+    int ypos(int p, int num) {
         return VERTICAL_BASE + level(p) * MODULE_HEIGHT;
     }
 
-    /**
-     * Add a new disc.
-     *
-     * @param disc disc identifier
-     * @param p    destination pin
-     */
     public void addDisc(int disc, int p) {
         if (disc < 1)
             return;
@@ -287,26 +257,20 @@ public class Drawable extends Canvas {
         addThing(new Disc(disc, p));
     }
 
-    /**
-     * Move the specified disc (if possible) to the given pin.
-     *
-     * @param disc disc identifier
-     * @param to   destination pin
-     */
     public void moveDisc(int disc, int to) {
         for (int from = 0; from < 3; from++) {
             if (to == from)
                 continue;
             if (pins[from] == null)
                 continue;
-            Disc d = pins[from];
+            Disc d = (Disc) pins[from];
             if (d.number == disc) {
                 new MovingDisc(from, to).action();
             }
         }
     }
 
-    public class MovingDisc {
+    class MovingDisc {
 
         int from;
         int target;
@@ -334,7 +298,7 @@ public class Drawable extends Canvas {
                     disc.move(dir, 0);
 
                 // Sink down
-                disc.target_y = ypos(target);
+                disc.target_y = ypos(target, disc.number);
 
                 while (disc.y < disc.target_y)
                     disc.move(0, MODULE_HEIGHT);
@@ -345,13 +309,7 @@ public class Drawable extends Canvas {
         }
     }
 
-    /**
-     * Constructor method for the interface.
-     * Should be supplied with the Towers instance.
-     *
-     * @param w the game to be drawn.
-     */
-    public Drawable(Towers w) {
+    Drawable(Towers w) {
         window = w;
         setSize(WIDTH, HEIGHT);
         setup();

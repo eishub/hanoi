@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Provides an interface to the Hanoi Tower game.
+ * Provides an interface to the Hanoi Tower model.
  *
  * @author Sander van den Oever
  */
@@ -20,7 +20,7 @@ import java.util.Map;
 public class HanoiInterface extends AbstractEnvironment {
 
 
-    private Towers game = null;
+    private Towers model = null;
     private Drawable gui = null;
 
     /**
@@ -30,12 +30,12 @@ public class HanoiInterface extends AbstractEnvironment {
      * @throws ManagementException
      */
     public void init(Map<String, Parameter> parameters) throws ManagementException {
-        // Prepare the game.
+        // Prepare the model.
         reset(parameters);
 
         // Try creating and registering an entity.
         try {
-            registerEntity("entity", new Entity(game));
+            registerEntity("entity", new Entity(model));
         } catch (EntityException e) {
             throw new ManagementException("Could not create an entity", e);
         }
@@ -58,7 +58,7 @@ public class HanoiInterface extends AbstractEnvironment {
         List<Integer> start = new ArrayList<Integer>();
         Parameter p = parameters.get("discs");
 
-        // Prepare game initialisation data.
+        // Prepare model initialisation data.
         if (p != null) {
             if (p instanceof ParameterList) {
                 ParameterList list = (ParameterList) p;
@@ -80,26 +80,26 @@ public class HanoiInterface extends AbstractEnvironment {
             start.add(0); // All discs positioned on the first tower (0).
         }
 
-        // Instantiate the game.
-        if (game == null) {
-            game = new Towers("Hanoi Towers Game", start);
+        // Instantiate the model.
+        if (model == null) {
+            model = new Towers("Hanoi Towers Game", start);
         } else {
-            game.reset(start);
+            model.reset(start);
         }
 
-        // Make the game-window visible.
-        game.setVisible(true);
+        // Make the model-window visible.
+        model.setVisible(true);
 
         setState(EnvironmentState.PAUSED);
     }
 
     @Override
     public void kill() throws ManagementException {
-        if (game != null) {
+        if (model != null) {
 //            gui.things = null;
-            game.removeAll(); // TODO: does this clean up all gui components correctly?
+            model.removeAll(); // TODO: does this clean up all gui components correctly?
             gui = null;
-            game = null;
+            model = null;
         }
         setState(EnvironmentState.KILLED);
     }
