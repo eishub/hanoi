@@ -20,7 +20,7 @@ public class Towers extends Frame {
             }
         });
 
-        pack();
+        reset(list);
     }
 
     public void paint(Graphics g) {

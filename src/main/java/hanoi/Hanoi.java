@@ -29,5 +29,8 @@ public class Hanoi {
         window.moveDisc(2,1);
         window.printDiscs();
         window.moveDisc(3,1);
+        window.printDiscs();
+        window.moveDisc(4,2);
+        window.printDiscs();
 	}
 }
