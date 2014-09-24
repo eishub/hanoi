@@ -4,6 +4,9 @@ import hanoi.gui.Towers;
 
 import java.util.ArrayList;
 
+/**
+ * Simple testing class.
+ */
 public class Hanoi {
 
 	public static void main(String[] args) {
@@ -17,12 +20,14 @@ public class Hanoi {
         list.add(1);
         
         window.reset(list);
-        
-        window.moveDisc(3,1);
-        window.moveDisc(3,2);
-        window.moveDisc(2,1);
-        window.moveDisc(3,1);
 
-        window.reset(null);
+        window.printDiscs();
+        window.moveDisc(3,1);
+        window.printDiscs();
+        window.moveDisc(3,2);
+        window.printDiscs();
+        window.moveDisc(2,1);
+        window.printDiscs();
+        window.moveDisc(3,1);
 	}
 }

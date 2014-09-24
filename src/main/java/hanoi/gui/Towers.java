@@ -32,14 +32,21 @@ public class Towers extends Frame {
     }
 
     public void moveDisc(int disc, int to) {
-        canvas.moveDisc(disc, to);
+        if (validMove(disc, to)) {
+            canvas.moveDisc(disc, to);
+        } else {
+            System.out.println("Invalid move!");
+        }
+
     }
 
-    // TODO
     public void reset(List<Integer> list) {
         if (list == null) {
             list = new ArrayList<Integer>() {{
-                add(0); add(0); add(0); add(0);
+                add(0);
+                add(0);
+                add(0);
+                add(0);
             }};
         }
 
@@ -61,10 +68,57 @@ public class Towers extends Frame {
     }
 
     public Drawable.Disc[] getPins() {
-        return null;
+        return canvas.pins;
     }
 
     public boolean discExists(int disc) {
-        return true;
+        if (getPins() != null) {
+            Drawable.Disc[] pins = getPins();
+            for (Drawable.Disc d : pins) {
+                if (d != null) {
+                    if (d.number == disc)
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean validMove(int d, int to) {
+        if (discExists(d)) {
+            Drawable.Disc disc = getDisc(d);
+            Drawable.Disc destination = getPins()[to];
+            if (destination != null) {
+                return (disc.size < destination.size);
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Drawable.Disc getDisc(int disc) {
+        Drawable.Disc[] pins = getPins();
+        for (Drawable.Disc d : pins) {
+            while (d != null) {
+                if (d.number == disc) {
+                    return d;
+                }
+                d = d.next;
+            }
+        }
+        return null;
+    }
+
+    public void printDiscs() {
+        Drawable.Disc[] pins = getPins();
+        for (Drawable.Disc d : pins) {
+            String res = "Pin[";
+            while (d != null) {
+                res += "(#" + d.number + " " + d.size + ")";
+                d = d.next;
+            }
+            System.out.println(res + "]");
+        }
     }
 }

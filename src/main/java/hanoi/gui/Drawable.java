@@ -162,6 +162,7 @@ public class Drawable extends Canvas {
         public int pin;
         public int number;
         public int lvl;
+        public int size;
         public Disc next;
 
         synchronized void pickUp(int t) {
@@ -197,6 +198,7 @@ public class Drawable extends Canvas {
             number = num;
             pin = p;
             lvl = level(p);
+            size = offset(number) * 2;
             next = pins[p];
             pins[p] = this;
             setup();
