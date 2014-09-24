@@ -100,7 +100,7 @@ public class Entity {
     @AsAction(name = "move")
     public void moveDisc(int disc, int to) throws ActException {
         if (model.discExists(disc)) {
-            return;
+            model.moveDisc(disc, to);
         } else {
             throw new IllegalArgumentException("Disc does not exist.");
         }

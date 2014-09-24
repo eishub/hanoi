@@ -1,6 +1,5 @@
 package hanoi.gui;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import eis.exceptions.ActException;
 
 import java.awt.*;
