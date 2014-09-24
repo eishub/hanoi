@@ -3,10 +3,13 @@ package eisinterface;
 import eis.eis2java.environment.AbstractEnvironment;
 import eis.exceptions.EntityException;
 import eis.exceptions.ManagementException;
+import eis.exceptions.RelationException;
 import eis.iilang.*;
 import hanoi.gui.Drawable;
 import hanoi.gui.Towers;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -83,6 +86,17 @@ public class HanoiInterface extends AbstractEnvironment {
         // Instantiate the model.
         if (model == null) {
             model = new Towers("Hanoi Towers Game", start);
+
+            model.addWindowListener(new WindowAdapter() {
+                public void windowClosing(WindowEvent e) {
+                    try {
+                        model.dispose();
+                        kill();
+                    } catch (ManagementException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            });;
         } else {
             model.reset(start);
         }
@@ -96,12 +110,16 @@ public class HanoiInterface extends AbstractEnvironment {
     @Override
     public void kill() throws ManagementException {
         if (model != null) {
-//            gui.things = null;
-            model.removeAll(); // TODO: does this clean up all gui components correctly?
+            model.removeAll(); // TODO Not needed? Dispose / GC takes care of it?
             gui = null;
-            model = null;
         }
-        setState(EnvironmentState.KILLED);
+        try {
+            deleteEntity("entity");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (!getState().equals(EnvironmentState.KILLED))
+            setState(EnvironmentState.KILLED);
     }
 
     /**

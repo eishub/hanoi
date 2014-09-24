@@ -14,12 +14,6 @@ public class Towers extends Frame {
         super(title);
         add(canvas = new Drawable(this));
 
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                System.exit(0);
-            }
-        });
-
         reset(list);
     }
 
