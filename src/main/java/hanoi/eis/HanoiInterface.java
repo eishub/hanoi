@@ -1,12 +1,10 @@
-package eisinterface;
+package hanoi.eis;
 
 import eis.eis2java.environment.AbstractEnvironment;
 import eis.exceptions.EntityException;
 import eis.exceptions.ManagementException;
-import eis.exceptions.RelationException;
 import eis.iilang.*;
-import hanoi.gui.Drawable;
-import hanoi.gui.Towers;
+import hanoi.Hanoi;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -15,16 +13,14 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Provides an interface to the Hanoi Tower model.
+ * Provides an interface to the Hanoi Tower game.
  *
  * @author Sander van den Oever
  */
 @SuppressWarnings("serial")
 public class HanoiInterface extends AbstractEnvironment {
 
-
-    private Towers model = null;
-    private Drawable gui = null;
+    private Hanoi controller = null;
 
     /**
      * Initializes and registers an Entity.
@@ -33,12 +29,12 @@ public class HanoiInterface extends AbstractEnvironment {
      * @throws ManagementException
      */
     public void init(Map<String, Parameter> parameters) throws ManagementException {
-        // Prepare the model.
+        // Prepare the game.
         reset(parameters);
 
         // Try creating and registering an entity.
         try {
-            registerEntity("entity", new Entity(model));
+            registerEntity("entity", new Entity(controller));
         } catch (EntityException e) {
             throw new ManagementException("Could not create an entity", e);
         }
@@ -49,7 +45,7 @@ public class HanoiInterface extends AbstractEnvironment {
      * resets the model to the given new size. Resets the environment(-interface)
      * with a set of key-value-pairs.
      *
-     * @param parameters
+     * @param parameters List of Numbers containing data to setup the game.
      * @throws ManagementException is thrown either when the initializing is not supported or
      *                             the parameters are wrong.
      */
@@ -58,10 +54,10 @@ public class HanoiInterface extends AbstractEnvironment {
             throws ManagementException {
 
         // Build the world based on the provided parameters.
-        List<Integer> start = new ArrayList<Integer>();
+        List<Integer> start = new ArrayList<>();
         Parameter p = parameters.get("discs");
 
-        // Prepare model initialisation data.
+        // Prepare game initialisation data.
         if (p != null) {
             if (p instanceof ParameterList) {
                 ParameterList list = (ParameterList) p;
@@ -83,43 +79,33 @@ public class HanoiInterface extends AbstractEnvironment {
             start.add(0); // All discs positioned on the first tower (0).
         }
 
-        // Instantiate the model.
-        if (model == null) {
-            model = new Towers("Hanoi Towers Game", start);
-
-            model.addWindowListener(new WindowAdapter() {
+        // Instantiate the game.
+        if (controller == null) {
+            controller = new Hanoi(start);
+            controller.getUI().addWindowListener(new WindowAdapter() {
                 public void windowClosing(WindowEvent e) {
                     try {
-                        model.dispose();
+                        deleteEntity("entity");
                         kill();
-                    } catch (ManagementException e1) {
-                        e1.printStackTrace();
+                    } catch (Exception ex) {
+                        // TODO
                     }
                 }
-            });;
+            });
         } else {
-            model.reset(start);
+            controller.reset(start);
         }
-
-        // Make the model-window visible.
-        model.setVisible(true);
 
         setState(EnvironmentState.PAUSED);
     }
 
     @Override
     public void kill() throws ManagementException {
-        if (model != null) {
-            model.removeAll(); // TODO Not needed? Dispose / GC takes care of it?
-            gui = null;
+        if (controller != null) {
+            controller.exitGame();
+            controller = null;
         }
-        try {
-            deleteEntity("entity");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (!getState().equals(EnvironmentState.KILLED))
-            setState(EnvironmentState.KILLED);
+        setState(EnvironmentState.KILLED);
     }
 
     /**
@@ -129,13 +115,7 @@ public class HanoiInterface extends AbstractEnvironment {
      */
     @Override
     protected boolean isSupportedByEnvironment(Action action) {
-        if (action.getName().equals("add") && action.getParameters().size() == 2) {
-            return true;
-        }
-        if (action.getName().equals("move") && action.getParameters().size() == 2) {
-            return true;
-        }
-        return false;
+        return (action.getName().equals("add") || action.getName().equals("move")) && action.getParameters().size() == 2;
     }
 
     /**

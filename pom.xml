@@ -1,14 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>eishub</groupId>
-	<artifactId>hanoi</artifactId>
-	<version>1.0.0</version>
-	<name>hanoi</name>
-	<description>A simple implementation of the Hanoi game (See http://wikipedia.org/wiki/Hanoi)</description>
-	<url>http://www.github.com/eishub/hanoi</url>
-
+  	<artifactId>hanoi</artifactId>
+  	<version>1.1</version>
+  	<name>hanoi</name>
+  	<description>A simple implementation of the Hanoi Game (see http://wikipedia.org/wiki/Hanoi)</description>
+  	
 	<licenses>
 		<license>
 			<name>GNU General Public License</name>
@@ -22,9 +21,9 @@
 	</organization>
 
 	<properties>
-		<version>1.0.0</version>
+		<version>1.0.1</version>
 		<main.class>HanoiInterface</main.class>
-		<main.class.package>eisinterface</main.class.package>
+		<main.class.package>hanoi.eis</main.class.package>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<github.global.server>github</github.global.server>
 	</properties>
