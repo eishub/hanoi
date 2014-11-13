@@ -33,6 +33,10 @@ public class Hanoi {
     }
 
     public Hanoi() {
+        // TODO control window optional
+        // TODO documentation
+        // TODO documentation EI
+        // TODO agent
         reset(null);
     }
 

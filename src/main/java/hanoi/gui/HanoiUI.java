@@ -49,14 +49,22 @@ public class HanoiUI extends JFrame {
     ControlUI controls;
 
     /**
-     * Public constructor.
+     * Whenever the gui parameter isn't supplied, call the constructor correctly.
      */
     public HanoiUI(Hanoi hanoi, int maxDiscs, Pin[] pins) {
+        new HanoiUI(hanoi, maxDiscs, pins, false);
+    }
+
+    /**
+     * Public constructor.
+     */
+    public HanoiUI(Hanoi hanoi, int maxDiscs, Pin[] pins, boolean gui) {
 
         super("Hanoi");
 
         this.hanoi = hanoi;
-        controls = new ControlUI(this);
+        if (gui)
+            controls = new ControlUI(this);
 
         // Set static information.
         this.pins = pins;
@@ -83,12 +91,14 @@ public class HanoiUI extends JFrame {
         setResizable(true);
         setVisible(true);
 
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                System.out.println("Controls are being closed because of the main window being closed!");
-                controls.dispose();
-            }
-        });
+        if (gui) {
+            addWindowListener(new WindowAdapter() {
+                public void windowClosing(WindowEvent e) {
+                    System.out.println("Controls are being closed because of the main window being closed!");
+                    controls.dispose();
+                }
+            });
+        }
     }
 
     /**
@@ -180,6 +190,8 @@ public class HanoiUI extends JFrame {
 
     public void updateGUI() {
         repaint();
-        controls.updateButtons();
+        if (controls != null) {
+            controls.updateButtons();
+        }
     }
 }
