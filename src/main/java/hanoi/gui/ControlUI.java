@@ -8,6 +8,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Control UI, used to provide the user the possibility to manually control the environment.
+ *
+ * @author Sander van den Oever
+ */
 public class ControlUI extends JFrame {
 
     private JButton btnLC = new JButton("Left to Center");

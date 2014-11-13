@@ -103,7 +103,7 @@ public class Pin {
     }
 
     /**
-     *
+     * Returns the level of the biggest disc on the current Pin.
      */
     public int maxLevel() {
         int res = Integer.MAX_VALUE;
