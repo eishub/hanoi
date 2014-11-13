@@ -22,7 +22,7 @@ public class Hanoi {
     protected HanoiUI ui;
 
     // Information for the game to function properly.
-    private int MAX_CAPACITY = 5;
+    public int MAX_CAPACITY = 5;
     private int DISCS = 0;
 
     /**
@@ -69,7 +69,7 @@ public class Hanoi {
         pins[2] = new Pin(2);
 
         // TODO Garbage collector will remove old junk.
-        ui = new HanoiUI(this, MAX_CAPACITY, pins);
+        ui = new HanoiUI(this, pins);
 
         // TODO proper error
         for (Integer x : list) {
