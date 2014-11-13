@@ -20,6 +20,7 @@ import java.util.Map;
 @SuppressWarnings("serial")
 public class HanoiInterface extends AbstractEnvironment {
 
+    // Game instance, with possibility to perform actions on the game.
     private Hanoi controller = null;
 
     /**
@@ -99,6 +100,9 @@ public class HanoiInterface extends AbstractEnvironment {
         setState(EnvironmentState.PAUSED);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void kill() throws ManagementException {
         if (controller != null) {
@@ -109,9 +113,7 @@ public class HanoiInterface extends AbstractEnvironment {
     }
 
     /**
-     * Returns true if the action is supported by the environment.
-     *
-     * @return true if the action is supported by the environment
+     * {@inheritDoc}
      */
     @Override
     protected boolean isSupportedByEnvironment(Action action) {
@@ -119,9 +121,7 @@ public class HanoiInterface extends AbstractEnvironment {
     }
 
     /**
-     * Returns true if the action is supported by the type.
-     *
-     * @return Returns true if the action is supported by the type
+     * {@inheritDoc}
      */
     @Override
     protected boolean isSupportedByType(Action action, String type) {
