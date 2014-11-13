@@ -26,12 +26,20 @@ public class Hanoi {
     private int DISCS = 0;
 
     /**
-     * Public constructor.
+     * Public constructor (when list is provided).
+     *
+     * Creates an object and instantiates it using the provided list.
+     * @param list list with parameters to set up the game.
      */
     public Hanoi(List<Integer> list) {
         reset(list);
     }
 
+    /**
+     * Public constructor.
+     *
+     * Creates an object and instantiates it using the default values.
+     */
     public Hanoi() {
         // TODO control window optional
         // TODO documentation
@@ -40,6 +48,10 @@ public class Hanoi {
         reset(null);
     }
 
+    /**
+     * Resets the game to the provided setup. If no list is supplied, default values will be used.
+     * @param list list with parameters to set up the game.
+     */
     public void reset(List<Integer> list) {
         if (list == null) {
             reset(new ArrayList<Integer>() {{
@@ -61,10 +73,10 @@ public class Hanoi {
 
         // TODO proper error
         for (Integer x : list) {
-            if (x.intValue() >= 0 && x.intValue() <= 2)
-                addDisc(pins[x.intValue()]);
+            if (x >= 0 && x <= 2)
+                addDisc(pins[x]);
             else
-                System.err.println("[ERROR] [RESET] Error in parameters for setting up the game. -> " + x.intValue());
+                System.err.println("[ERROR] [RESET] Error in parameters for setting up the game. -> " + x);
         }
     }
 
@@ -82,8 +94,7 @@ public class Hanoi {
      *
      * @param origin      Pin to get the disc from.
      * @param destination Pin to move the disc to.
-     *                    <p/>
-     *                    TODO: This can be done in a cleaner
+     * TODO: This can be done in a cleaner way
      */
     public void moveDisc(Pin origin, Pin destination) {
         // Check for existing disc that can be moved.
@@ -103,6 +114,8 @@ public class Hanoi {
         } else {
             System.out.println("Failed to move! The originating Pin is empty!");
         }
+
+        // Update the UI
         getUI().updateGUI();
         getUI().repaint();
     }
@@ -172,11 +185,18 @@ public class Hanoi {
         return pins;
     }
 
+    /**
+     * Closes the ui and exits the game.
+     */
     public void exitGame() {
         ui.dispose();
         pins = null;
     }
 
+    /**
+     * Returns the UI object.
+     * @return HanoiUI UI object.
+     */
     public HanoiUI getUI() {
         return ui;
     }

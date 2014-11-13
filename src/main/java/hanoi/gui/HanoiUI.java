@@ -49,16 +49,21 @@ public class HanoiUI extends JFrame {
     ControlUI controls;
 
     /**
+     * Constructor forwarder.
      * Whenever the gui parameter isn't supplied, call the constructor correctly.
      */
     public HanoiUI(Hanoi hanoi, int maxDiscs, Pin[] pins) {
-        new HanoiUI(hanoi, maxDiscs, pins, false);
+        new HanoiUI(hanoi, maxDiscs, false);
     }
 
     /**
      * Public constructor.
+     *
+     * Creates a game instance with given parameters.
+     * @param hanoi Game instance containing the state of the game / ability to perform actions.
+     * @param gui specifies whether a control panel (user controlled) should be shown.
      */
-    public HanoiUI(Hanoi hanoi, int maxDiscs, Pin[] pins, boolean gui) {
+    public HanoiUI(Hanoi hanoi, int maxDiscs, boolean gui) {
 
         super("Hanoi");
 
@@ -67,7 +72,7 @@ public class HanoiUI extends JFrame {
             controls = new ControlUI(this);
 
         // Set static information.
-        this.pins = pins;
+        this.pins = hanoi.getPins();
         MAX_DISCS = maxDiscs + 2; // TODO: Find why this is needed.
 
         // Pins should be able to contain the biggest disc (and be a little bigger in order to look nice).
