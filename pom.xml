@@ -24,7 +24,7 @@
 					<archive>
 						<manifestEntries>
 							<mainClass>hanoi.eis.HanoiInterface</mainClass>
-						</manifest>
+						</manifestEntries>
 					</archive>
 				</configuration>
 			</plugin>
