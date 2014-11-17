@@ -1,12 +1,13 @@
-package eisinterface;
+package hanoi.eis;
 
 import eis.eis2java.environment.AbstractEnvironment;
 import eis.exceptions.EntityException;
 import eis.exceptions.ManagementException;
 import eis.iilang.*;
-import hanoi.gui.Drawable;
-import hanoi.gui.Towers;
+import hanoi.Hanoi;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -19,9 +20,8 @@ import java.util.Map;
 @SuppressWarnings("serial")
 public class HanoiInterface extends AbstractEnvironment {
 
-
-    private Towers game = null;
-    private Drawable gui = null;
+    // Game instance, with possibility to perform actions on the game.
+    private Hanoi controller = null;
 
     /**
      * Initializes and registers an Entity.
@@ -35,7 +35,7 @@ public class HanoiInterface extends AbstractEnvironment {
 
         // Try creating and registering an entity.
         try {
-            registerEntity("entity", new Entity(game));
+            registerEntity("entity", new Entity(controller));
         } catch (EntityException e) {
             throw new ManagementException("Could not create an entity", e);
         }
@@ -46,7 +46,7 @@ public class HanoiInterface extends AbstractEnvironment {
      * resets the model to the given new size. Resets the environment(-interface)
      * with a set of key-value-pairs.
      *
-     * @param parameters
+     * @param parameters List of Numbers containing data to setup the game.
      * @throws ManagementException is thrown either when the initializing is not supported or
      *                             the parameters are wrong.
      */
@@ -55,7 +55,7 @@ public class HanoiInterface extends AbstractEnvironment {
             throws ManagementException {
 
         // Build the world based on the provided parameters.
-        List<Integer> start = new ArrayList<Integer>();
+        List<Integer> start = new ArrayList<>();
         Parameter p = parameters.get("discs");
 
         // Prepare game initialisation data.
@@ -81,49 +81,47 @@ public class HanoiInterface extends AbstractEnvironment {
         }
 
         // Instantiate the game.
-        if (game == null) {
-            game = new Towers("Hanoi Towers Game", start);
+        if (controller == null) {
+            controller = new Hanoi(start);
+            controller.getUI().addWindowListener(new WindowAdapter() {
+                public void windowClosing(WindowEvent e) {
+                    try {
+                        deleteEntity("entity");
+                        kill();
+                    } catch (Exception ex) {
+                        // TODO
+                    }
+                }
+            });
         } else {
-            game.reset(start);
+            controller.reset(start);
         }
-
-        // Make the game-window visible.
-        game.setVisible(true);
 
         setState(EnvironmentState.PAUSED);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void kill() throws ManagementException {
-        if (game != null) {
-//            gui.things = null;
-            game.removeAll(); // TODO: does this clean up all gui components correctly?
-            gui = null;
-            game = null;
+        if (controller != null) {
+            controller.exitGame();
+            controller = null;
         }
         setState(EnvironmentState.KILLED);
     }
 
     /**
-     * Returns true if the action is supported by the environment.
-     *
-     * @return true if the action is supported by the environment
+     * {@inheritDoc}
      */
     @Override
     protected boolean isSupportedByEnvironment(Action action) {
-        if (action.getName().equals("add") && action.getParameters().size() == 2) {
-            return true;
-        }
-        if (action.getName().equals("move") && action.getParameters().size() == 2) {
-            return true;
-        }
-        return false;
+        return (action.getName().equals("add") || action.getName().equals("move")) && action.getParameters().size() == 2;
     }
 
     /**
-     * Returns true if the action is supported by the type.
-     *
-     * @return Returns true if the action is supported by the type
+     * {@inheritDoc}
      */
     @Override
     protected boolean isSupportedByType(Action action, String type) {
