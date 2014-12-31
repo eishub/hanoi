@@ -7,8 +7,6 @@ A list of available Percepts;
     disc(Name, Level)           Name     = Disc identifier.
                                 Level    = Disc level / size. 
                                            Bigger discs can't be piled upon smaller ones.
-                          
-    pins(Amount)                Amount   = The amount of pins in this instance of the game.
     
     on(Name, Position, Next)    Name     = Disc identifier.
                                 Position = Pin identifier.
