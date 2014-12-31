@@ -18,12 +18,12 @@ public class Hanoi {
     // Information about the pins.
     protected Pin[] pins = new Pin[3];
 
-    // Visaual representation of the Game.
+    // Visual representation of the Game.
     protected HanoiUI ui;
 
     // Information for the game to function properly.
     public int MAX_CAPACITY = 5;
-    private int DISCS = 0;
+    private int DISCS = 1;
 
     /**
      * Public constructor (when list is provided).
@@ -63,7 +63,7 @@ public class Hanoi {
             return;
         }
 
-        // Creating the pins
+        // Create three pins
         pins[0] = new Pin(0);
         pins[1] = new Pin(1);
         pins[2] = new Pin(2);
@@ -78,6 +78,8 @@ public class Hanoi {
             else
                 System.err.println("[ERROR] [RESET] Error in parameters for setting up the game. -> " + x);
         }
+        
+        ui.updateGUI();
     }
 
     /**
@@ -100,19 +102,18 @@ public class Hanoi {
         // Check for existing disc that can be moved.
         if (origin.discsOnPin() >= 1) {
             if (origin.getTopDisc().getSize() <= destination.maxLevel()) {
-                // Move Logics.
+                // Move
                 try {
                     Disc toBeMoved = origin.popDisc();
                     destination.addDisc(toBeMoved);
                 } catch (EmptyPinException e) {
                     System.out.println("Pin was empty even after the check?!");
                 }
-
             } else {
-                System.out.println("Disc can not be moved. Invalid move!");
+                System.out.println("Disc cannot be moved. Invalid move!");
             }
         } else {
-            System.out.println("Failed to move! The originating Pin is empty!");
+            System.out.println("Failed to move! The originating pin is empty!");
         }
 
         // Update the UI
@@ -159,8 +160,8 @@ public class Hanoi {
     /**
      * Determines whether a move can be made in the current situation.
      *
-     * @param p1 int identifying the origin Pin.
-     * @param p2 int identifying the destination Pin.
+     * @param p1 int identifying the origin pin.
+     * @param p2 int identifying the destination pin.
      * @return boolean true if valid move, false otherwise.
      */
     public boolean validMove(int p1, int p2) {

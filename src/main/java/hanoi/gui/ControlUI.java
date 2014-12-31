@@ -15,19 +15,21 @@ import java.awt.event.ActionListener;
  */
 public class ControlUI extends JFrame {
 
-    private JButton btnLC = new JButton("Left to Center");
+	private static final long serialVersionUID = 1L;
+	
+	private JButton btnLC = new JButton("Left to Center");
     private JButton btnLR = new JButton("Left to Right");
     private JButton btnCL = new JButton("Center to Left");
     private JButton btnCR = new JButton("Center to Right");
     private JButton btnRL = new JButton("Right to Left");
     private JButton btnRC = new JButton("Right to Center");
 
-    private HanoiUI hanoi;
+    private HanoiUI ui;
 
     public ControlUI(HanoiUI h) {
         super("Hanoi Controls");
 
-        this.hanoi = h;
+        this.ui = h;
 
         setTitle("Hanoi Controls");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -62,30 +64,31 @@ public class ControlUI extends JFrame {
      * TODO: This can be done in a nicer way.
      */
     public void updateButtons() {
-        Hanoi h = hanoi.getGame();
-        btnLC.setEnabled(h.validMove(0, 1));
-        btnLR.setEnabled(h.validMove(0, 2));
-        btnCL.setEnabled(h.validMove(1, 0));
-        btnCR.setEnabled(h.validMove(1, 2));
-        btnRL.setEnabled(h.validMove(2, 0));
-        btnRC.setEnabled(h.validMove(2, 1));
+        Hanoi game = ui.getGame();
+        btnLC.setEnabled(game.validMove(0, 1));
+        btnLR.setEnabled(game.validMove(0, 2));
+        btnCL.setEnabled(game.validMove(1, 0));
+        btnCR.setEnabled(game.validMove(1, 2));
+        btnRL.setEnabled(game.validMove(2, 0));
+        btnRC.setEnabled(game.validMove(2, 1));
+        repaint();
     }
 
     private class ControlButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            Pin[] pins = hanoi.getGame().getPins();
+            Pin[] pins = ui.getGame().getPins();
             if (e.getSource() == btnLC) {
-                hanoi.moveDisc(pins[0], pins[1]);
+                ui.moveDisc(pins[0], pins[1]);
             } else if (e.getSource() == btnLR) {
-                hanoi.moveDisc(pins[0], pins[2]);
+                ui.moveDisc(pins[0], pins[2]);
             } else if (e.getSource() == btnCL) {
-                hanoi.moveDisc(pins[1], pins[0]);
+                ui.moveDisc(pins[1], pins[0]);
             } else if (e.getSource() == btnCR) {
-                hanoi.moveDisc(pins[1], pins[2]);
+                ui.moveDisc(pins[1], pins[2]);
             } else if (e.getSource() == btnRL) {
-                hanoi.moveDisc(pins[2], pins[0]);
+                ui.moveDisc(pins[2], pins[0]);
             } else if (e.getSource() == btnRC) {
-                hanoi.moveDisc(pins[2], pins[1]);
+                ui.moveDisc(pins[2], pins[1]);
             }
         }
     }

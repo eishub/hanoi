@@ -37,7 +37,7 @@ public class HanoiInterface extends AbstractEnvironment {
         try {
             registerEntity("entity", new Entity(controller));
         } catch (EntityException e) {
-            throw new ManagementException("Could not create an entity", e);
+            throw new ManagementException("Could not create gripper entity", e);
         }
     }
 
@@ -58,7 +58,7 @@ public class HanoiInterface extends AbstractEnvironment {
         List<Integer> start = new ArrayList<>();
         Parameter p = parameters.get("discs");
 
-        // Prepare game initialisation data.
+        // Prepare game initialization data.
         if (p != null) {
             if (p instanceof ParameterList) {
                 ParameterList list = (ParameterList) p;
@@ -77,7 +77,7 @@ public class HanoiInterface extends AbstractEnvironment {
             start.add(0);
             start.add(0);
             start.add(0);
-            start.add(0); // All discs positioned on the first tower (0).
+            start.add(0); // All discs positioned on the first pin (0).
         }
 
         // Instantiate the game.
@@ -117,7 +117,7 @@ public class HanoiInterface extends AbstractEnvironment {
      */
     @Override
     protected boolean isSupportedByEnvironment(Action action) {
-        return (action.getName().equals("add") || action.getName().equals("move")) && action.getParameters().size() == 2;
+        return action.getName().equals("move") && action.getParameters().size() == 2;
     }
 
     /**

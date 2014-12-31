@@ -17,7 +17,9 @@ import java.awt.event.WindowEvent;
  */
 public class HanoiUI extends JFrame {
 
-    // Predefined values.
+	private static final long serialVersionUID = 1L;
+
+	// Predefined values.
     final private int SPACER = 20;
 
     final private int PIN_WIDTH = 10;
@@ -41,9 +43,6 @@ public class HanoiUI extends JFrame {
     private int WINDOW_WIDTH;
     private int WINDOW_HEIGHT;
 
-    // Information about the Discs
-    private Pin[] pins;
-
     // Game itself and the controls
     private Hanoi hanoi;
     ControlUI controls;
@@ -53,7 +52,7 @@ public class HanoiUI extends JFrame {
      * Whenever the gui parameter isn't supplied, call the constructor correctly.
      */
     public HanoiUI(Hanoi hanoi, Pin[] pins) {
-        new HanoiUI(hanoi, false);
+        new HanoiUI(hanoi, true);
     }
 
     /**
@@ -72,7 +71,6 @@ public class HanoiUI extends JFrame {
             controls = new ControlUI(this);
 
         // Set static information.
-        this.pins = hanoi.getPins();
         MAX_DISCS = hanoi.MAX_CAPACITY + 2; // TODO: Find why this is needed.
 
         // Pins should be able to contain the biggest disc (and be a little bigger in order to look nice).
@@ -105,19 +103,31 @@ public class HanoiUI extends JFrame {
             });
         }
     }
+    
+    @Override
+    public void update(Graphics g) {
+    	super.update(g);
+    	
+        drawPins(g);
+        drawDiscs(g, hanoi.getPins());
+        
+        System.out.println("call to update");
+    }
 
     /**
      * Draw the GUI.
      */
+    @Override
     public void paint(Graphics g) {
         super.paint(g);
 
         drawPins(g);
-        drawDiscs(g, pins);
+        drawDiscs(g, hanoi.getPins());
+        System.out.println("call to paint");
     }
 
     /**
-     * Draw the (orange) Pins.
+     * Draw the (orange) pins.
      *
      * @param g Graphics object from the paint function.
      */
@@ -195,6 +205,7 @@ public class HanoiUI extends JFrame {
 
     public void updateGUI() {
         repaint();
+        System.out.println("call to updateGUI");
         if (controls != null) {
             controls.updateButtons();
         }

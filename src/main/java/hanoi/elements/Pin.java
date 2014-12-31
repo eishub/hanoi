@@ -3,7 +3,7 @@ package hanoi.elements;
 import hanoi.exceptions.EmptyPinException;
 
 /**
- * Class to represent a Pin. A Pin can be used to place Discs upon.
+ * Class to represent a Pin. A pin can be used to place discs on.
  *
  * @author Sander van den Oever
  */
@@ -15,7 +15,7 @@ public class Pin {
     /**
      * Public constructor.
      *
-     * @param id id of the Pin.
+     * @param id id of the pin.
      */
     public Pin(int id) {
         this.id = id;
@@ -83,7 +83,7 @@ public class Pin {
     public Disc popDisc() throws EmptyPinException {
         // Case of an empty Pin.
         if (isEmpty())
-            throw new EmptyPinException("Can't pop from an empty pin! Pin " + this.id + " is empty!");
+            throw new EmptyPinException("Cannot remove disc from an empty pin! Pin " + this.id + " is empty!");
 
         Disc tmp = discs;
 

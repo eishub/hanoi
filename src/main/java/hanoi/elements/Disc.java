@@ -1,8 +1,8 @@
 package hanoi.elements;
 
 /**
- * A Disc can be placed on a Pin. Bigger discs can not be placed on smaller
- * discs.
+ * A disc can be placed on a pin.
+ * Bigger discs cannot be placed on smaller discs.
  *
  * @author Sander van den Oever
  */
