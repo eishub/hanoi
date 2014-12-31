@@ -10,7 +10,6 @@
 
 	<groupId>eishub</groupId>
 	<artifactId>hanoi</artifactId>
-	<version>1.1</version>
 	<name>hanoi</name>
 	<description>A simple implementation of the Hanoi Game (see http://wikipedia.org/wiki/Hanoi)</description>
 	<url>http://github.com/eishub/${environmentname}</url>
@@ -196,4 +195,5 @@
 		</dependency>
 	</dependencies>
 
+	<version>0.1</version>
 </project>
