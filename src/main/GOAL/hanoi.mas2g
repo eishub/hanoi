@@ -1,0 +1,11 @@
+environment{
+	env = "hanoi-0.1.jar".	
+}
+
+agentfiles{
+	"hanoi.goal".
+}
+
+launchpolicy{
+	when entity@env do launch hanoi.
+}
