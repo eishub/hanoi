@@ -114,6 +114,7 @@ public class HanoiUI extends JFrame {
 				}
 			});
 		}
+		repaint(0, 0, getWidth(), getHeight());
 	}
 
 	@Override
@@ -130,7 +131,7 @@ public class HanoiUI extends JFrame {
 	 * Draw the GUI.
 	 */
 	@Override
-	public void paint(Graphics g) {
+	public synchronized void paint(Graphics g) {
 		super.paint(g);
 
 		drawPins(g);
@@ -231,10 +232,10 @@ public class HanoiUI extends JFrame {
 	}
 
 	public void updateGUI() {
-		repaint();
 		System.out.println("call to updateGUI");
 		if (controls != null) {
 			controls.updateButtons();
 		}
+		repaint(0, 0, getWidth(), getHeight());
 	}
 }
