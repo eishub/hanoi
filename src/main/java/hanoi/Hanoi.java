@@ -130,7 +130,6 @@ public class Hanoi {
 
 		// Update the UI
 		getUI().updateGUI();
-		// getUI().repaint();
 	}
 
 	/**
@@ -217,4 +216,5 @@ public class Hanoi {
 	public HanoiUI getUI() {
 		return ui;
 	}
+
 }
