@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<environmentname>hanoi</environmentname>
@@ -13,7 +13,8 @@
 	<name>hanoi</name>
 	<description>A simple implementation of the Hanoi Game (see http://wikipedia.org/wiki/Hanoi)</description>
 	<url>http://github.com/eishub/${environmentname}</url>
-	
+	<version>0.1</version>
+
 	<developers>
 		<developer>
 			<name>Koen Hindriks</name>
@@ -154,7 +155,8 @@
 				<configuration>
 					<server>github</server>
 					<!-- git commit message -->
-					<message>Maven artifacts for ${project.name} version ${project.version}</message>
+					<message>Maven artifacts for ${project.name} version
+						${project.version}</message>
 					<!-- matches distribution management repository url above -->
 					<outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
 					<!-- remote branch name -->
@@ -195,5 +197,4 @@
 		</dependency>
 	</dependencies>
 
-	<version>0.1</version>
 </project>
