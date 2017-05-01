@@ -1,0 +1,8 @@
+use know as knowledge.
+use belfs as beliefs.
+
+module  events {
+		% Update on(Name, Position, Next).
+ 		forall percept(on(Name, Position, Next), on(Name, OldPos, OldNext), not(OldPos=Position)) do
+ 			insert(on(Name, Position, Next)) + delete(on(Name, OldPos, OldNext)).
+}

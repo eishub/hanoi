@@ -1,0 +1,11 @@
+use know as knowledge.
+
+module init {
+		% handle initial percepts
+		% disc(Name, Level): Name = Disc identifier; Level = Disc level / size.
+		forall percept(disc(Name, Size)) do insert(disc(Name, Size)).
+		% on(Name, Position, Next): Name = Disc identifier; Position = Pin identifier;
+		% Next = Identifier of the disc below the current one and is equal to 0 (zero)
+		% in case the disc is the last one.
+ 		forall percept(on(Name, Position, Next)) do insert(on(Name, Position, Next)). 
+}

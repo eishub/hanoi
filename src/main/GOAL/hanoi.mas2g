@@ -1,11 +1,12 @@
-environment{
-	env = "hanoi-0.1.jar".	
-}
 
-agentfiles{
-	"hanoi.goal".
-}
+use "hanoi-0.1.jar" as environment.
+
+define hanoi as agent {
+	use hanoi as main module.
+	use events as event module.
+	use initmod as init module.
+} 
 
 launchpolicy{
-	when entity@env do launch hanoi.
+	when type=entity launch hanoi.
 }
