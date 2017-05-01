@@ -13,7 +13,7 @@
 	<name>hanoi</name>
 	<description>A simple implementation of the Hanoi Game (see http://wikipedia.org/wiki/Hanoi)</description>
 	<url>http://github.com/eishub/${environmentname}</url>
-	<version>0.1</version>
+	<version>1.0.0</version>
 
 	<developers>
 		<developer>
@@ -155,8 +155,7 @@
 				<configuration>
 					<server>github</server>
 					<!-- git commit message -->
-					<message>Maven artifacts for ${project.name} version
-						${project.version}</message>
+					<message>Maven artifacts for ${project.name} version ${project.version}</message>
 					<!-- matches distribution management repository url above -->
 					<outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
 					<!-- remote branch name -->
@@ -182,7 +181,7 @@
 			</plugin>
 		</plugins>
 	</build>
-
+	
 	<dependencies>
 		<dependency>
 			<groupId>eishub</groupId>

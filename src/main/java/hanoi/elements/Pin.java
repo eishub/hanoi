@@ -78,7 +78,8 @@ public class Pin {
     }
 
     /**
-     * @throws EmptyPinException
+     * @return disk on this pin
+     * @throws EmptyPinException if pin is empty
      */
     public Disc popDisc() throws EmptyPinException {
         // Case of an empty Pin.
@@ -103,7 +104,7 @@ public class Pin {
     }
 
     /**
-     * Returns the level of the biggest disc on the current Pin.
+     * @return the level of the biggest disc on the current Pin.
      */
     public int maxLevel() {
         int res = Integer.MAX_VALUE;

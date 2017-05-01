@@ -29,6 +29,8 @@ public class HanoiUI extends JFrame {
 	/**
 	 * Constructor forwarder. Whenever the gui parameter isn't supplied, call
 	 * the constructor correctly.
+	 * @param hanoi the game board?
+	 * @param pins the pins shown
 	 */
 	public HanoiUI(Hanoi hanoi, Pin[] pins) {
 		init(hanoi, true);

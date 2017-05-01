@@ -23,12 +23,7 @@ public class HanoiInterface extends AbstractEnvironment {
     // Game instance, with possibility to perform actions on the game.
     private Hanoi controller = null;
 
-    /**
-     * Initializes and registers an Entity.
-     *
-     * @param parameters parameters for initialization.
-     * @throws ManagementException
-     */
+    @Override
     public void init(Map<String, Parameter> parameters) throws ManagementException {
         // Prepare the game.
         reset(parameters);
@@ -41,15 +36,6 @@ public class HanoiInterface extends AbstractEnvironment {
         }
     }
 
-    /**
-     * Creates a new model if not already there. If there is already a model, it
-     * resets the model to the given new size. Resets the environment(-interface)
-     * with a set of key-value-pairs.
-     *
-     * @param parameters List of Numbers containing data to setup the game.
-     * @throws ManagementException is thrown either when the initializing is not supported or
-     *                             the parameters are wrong.
-     */
     @Override
     public void reset(Map<String, Parameter> parameters)
             throws ManagementException {
@@ -100,9 +86,6 @@ public class HanoiInterface extends AbstractEnvironment {
         setState(EnvironmentState.PAUSED);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void kill() throws ManagementException {
         if (controller != null) {
@@ -112,17 +95,11 @@ public class HanoiInterface extends AbstractEnvironment {
         setState(EnvironmentState.KILLED);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected boolean isSupportedByEnvironment(Action action) {
         return action.getName().equals("move") && action.getParameters().size() == 2;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected boolean isSupportedByType(Action action, String type) {
         return isSupportedByEnvironment(action);

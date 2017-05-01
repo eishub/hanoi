@@ -17,6 +17,7 @@ public class Disc {
      *
      * @param id   id of the Disc
      * @param size size of the Disc (width)
+     * @param pin the pin that the disk is on.
      */
     public Disc(int id, int size, Pin pin) {
         this.id = id;
