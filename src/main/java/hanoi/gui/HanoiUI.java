@@ -8,6 +8,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 /**
  * Simple GUI for the Hanoi game.
@@ -36,26 +37,12 @@ public class HanoiUI extends JFrame {
 		init(hanoi, true);
 	}
 
-	/**
-	 * Public constructor.
-	 *
-	 * Creates a game instance with given parameters.
-	 * 
-	 * @param hanoi
-	 *            Game instance containing the state of the game / ability to
-	 *            perform actions.
-	 * @param gui
-	 *            specifies whether a control panel (user controlled) should be
-	 *            shown.
-	 */
-	public HanoiUI(Hanoi hanoi, boolean gui) {
-		init(hanoi, gui);
-	}
+
 
 	private void init(Hanoi hanoi, boolean gui) {
 		setTitle("Hanoi");
 		setLayout(new BorderLayout());
-		panel = new HanoiPanel(hanoi);
+		panel = new HanoiPanel(hanoi.getPins());
 		add(panel, BorderLayout.CENTER);
 
 		this.hanoi = hanoi;
@@ -112,5 +99,21 @@ public class HanoiUI extends JFrame {
 			controls.updateButtons();
 		}
 		repaint(0, 0, getWidth(), getHeight());
+	}
+
+	public void close() {
+		if (controls!=null) {
+			controls.close();
+			controls=null;
+		}
+
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				setVisible(false);
+				dispose(); 
+			}
+		});
+
 	}
 }

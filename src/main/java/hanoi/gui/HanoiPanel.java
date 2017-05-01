@@ -40,13 +40,14 @@ class HanoiPanel extends JPanel {
 	private int WINDOW_WIDTH;
 	private int WINDOW_HEIGHT;
 
-	private Hanoi hanoi;
+	private Pin[] pins;
 
-	public HanoiPanel(Hanoi h) {
-		hanoi = h;
+
+	public HanoiPanel(Pin[] pins) {
+		this.pins=pins;
 
 		// Set static information.
-		int MAX_DISCS = hanoi.MAX_CAPACITY + 2; // TODO: Find why this is
+		int MAX_DISCS = Hanoi.MAX_CAPACITY + 2; // TODO: Find why this is
 												// needed.
 
 		// Pins should be able to contain the biggest disc (and be a little
@@ -74,7 +75,7 @@ class HanoiPanel extends JPanel {
 		super.paint(g);
 
 		drawPins(g);
-		drawDiscs(g, hanoi.getPins());
+		drawDiscs(g, pins);
 	}
 
 	/**

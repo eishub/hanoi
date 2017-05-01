@@ -22,7 +22,7 @@ public class Hanoi {
 	protected HanoiUI ui;
 
 	// Information for the game to function properly.
-	public int MAX_CAPACITY = 5;
+	public static final int MAX_CAPACITY = 5;
 	private int DISCS = 1;
 
 	/**
@@ -75,7 +75,10 @@ public class Hanoi {
 		pins[1] = new Pin(1);
 		pins[2] = new Pin(2);
 
-		// TODO Garbage collector will remove old junk.
+		if (ui!=null) {
+			ui.close();
+			ui=null;
+		}
 		ui = new HanoiUI(this, pins);
 
 		// TODO proper error
@@ -204,7 +207,8 @@ public class Hanoi {
 	 * Closes the ui and exits the game.
 	 */
 	public void exitGame() {
-		ui.dispose();
+		ui.close();
+		ui=null;
 		pins = null;
 	}
 

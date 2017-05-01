@@ -5,6 +5,7 @@ package hanoi.exceptions;
  * 
  * @author Sander van den Oever
  */
+@SuppressWarnings("serial")
 public class EmptyPinException extends Exception {
 	/**
 	 * Parameterless constructor.

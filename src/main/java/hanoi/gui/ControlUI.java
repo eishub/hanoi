@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 /**
  * Control UI, used to provide the user the possibility to manually control the
@@ -95,5 +96,16 @@ public class ControlUI extends JFrame {
 				ui.moveDisc(pins[2], pins[1]);
 			}
 		}
+	}
+
+	public void close() {
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				setVisible(false);
+				dispose(); 
+			}
+		});
 	}
 }
