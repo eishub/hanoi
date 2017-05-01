@@ -1,5 +1,5 @@
 
-use "hanoi-0.1.jar" as environment.
+use "hanoi-1.0.0-jar-with-dependencies.jar" as environment.
 
 define hanoi as agent {
 	use hanoi as main module.
@@ -8,5 +8,5 @@ define hanoi as agent {
 } 
 
 launchpolicy{
-	when type=entity launch hanoi.
+	when type=hanoicontroller launch hanoi.
 }

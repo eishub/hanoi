@@ -30,7 +30,7 @@ public class HanoiInterface extends AbstractEnvironment {
 
         // Try creating and registering an entity.
         try {
-            registerEntity("entity", new Entity(controller));
+            registerEntity("hanoi", "hanoicontroller", new Entity(controller));
         } catch (EntityException e) {
             throw new ManagementException("Could not create gripper entity", e);
         }

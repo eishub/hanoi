@@ -1,4 +1,4 @@
-% on(Name, Position, Next)
+% on(Name, Pin, onDisk)
 :- dynamic on/3.
 
 %disc(Name, size).
