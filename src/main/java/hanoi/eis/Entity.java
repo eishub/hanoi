@@ -88,7 +88,7 @@ public class Entity {
      *
      * @param from origin pin, can be either "left", "center" or "right"
      * @param to   pin to move the disc to, can be either "left", "center" or "right"
-     *             <p/>
+     *            
      */
     @AsAction(name = "move")
     public void moveDisc(int from, int to) {
