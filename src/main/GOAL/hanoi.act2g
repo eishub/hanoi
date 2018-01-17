@@ -1,8 +1,0 @@
-use know as knowledge.
-
-% Action move(FromPin, ToPin) for moving discs: FromPin = Pin identifier; ToPin = Destination pin.
-% Bigger discs can't be piled upon smaller ones. If a move is impossible, nothing happens.
-define	move(FromPin, ToPin) with
-	pre { topDisc(Disc, FromPin, Size), not( FromPin = ToPin ), ( empty(ToPin) ; (topDisc(ToDisc, ToPin, ToSize)), ToSize > Size) }
-	post { true }
-

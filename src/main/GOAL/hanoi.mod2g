@@ -1,9 +1,0 @@
-use know as knowledge.
-use belfs as beliefs.
-use hanoi as actionspec.
-
-
-module hanoi {
-		if bel(pins(P), random_between(0, P, FromPin), random_between(0, P, ToPin) ) then move(FromPin, ToPin).
-}
-
