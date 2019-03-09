@@ -1,6 +1,7 @@
 package hanoi;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import eis.exceptions.ActException;
 import hanoi.gui.Towers;
@@ -9,12 +10,11 @@ import hanoi.gui.Towers;
  * Simple testing class.
  */
 public class Hanoi {
-
 	public static void main(String[] args) throws ActException {
 		Towers window = new Towers("The Hanoi Puzzle", null);
 		window.setVisible(true);
 
-		ArrayList<Integer> list = new ArrayList<Integer>();
+		List<Integer> list = new ArrayList<>(4);
 		list.add(0);
 		list.add(0);
 		list.add(0);

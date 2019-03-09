@@ -14,7 +14,6 @@ import eis.iilang.EnvironmentState;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
 import eis.iilang.ParameterList;
-import hanoi.gui.Drawable;
 import hanoi.gui.Towers;
 
 /**
@@ -24,24 +23,22 @@ import hanoi.gui.Towers;
  */
 @SuppressWarnings("serial")
 public class HanoiInterface extends AbstractEnvironment {
-
-	private Towers model = null;
-	private Drawable gui = null;
+	Towers model = null;
 
 	/**
 	 * Initializes and registers an Entity.
 	 *
-	 * @param parameters
-	 *            parameters for initialization.
+	 * @param parameters parameters for initialization.
 	 * @throws ManagementException
 	 */
+	@Override
 	public void init(Map<String, Parameter> parameters) throws ManagementException {
 		// Prepare the model.
 		reset(parameters);
 
 		// Try creating and registering an entity.
 		try {
-			registerEntity("entity", "hanoicontroller", new Entity(model));
+			registerEntity("entity", "hanoicontroller", new Entity(this.model));
 		} catch (EntityException e) {
 			throw new ManagementException("Could not create an entity", e);
 		}
@@ -49,19 +46,17 @@ public class HanoiInterface extends AbstractEnvironment {
 
 	/**
 	 * Creates a new model if not already there. If there is already a model, it
-	 * resets the model to the given new size. Resets the
-	 * environment(-interface) with a set of key-value-pairs.
+	 * resets the model to the given new size. Resets the environment(-interface)
+	 * with a set of key-value-pairs.
 	 *
 	 * @param parameters
-	 * @throws ManagementException
-	 *             is thrown either when the initializing is not supported or
-	 *             the parameters are wrong.
+	 * @throws ManagementException is thrown either when the initializing is not
+	 *                             supported or the parameters are wrong.
 	 */
 	@Override
 	public void reset(Map<String, Parameter> parameters) throws ManagementException {
-
 		// Build the world based on the provided parameters.
-		List<Integer> start = new ArrayList<Integer>();
+		List<Integer> start = new ArrayList<>();
 		Parameter p = parameters.get("discs");
 
 		// Prepare model initialisation data.
@@ -87,13 +82,14 @@ public class HanoiInterface extends AbstractEnvironment {
 		}
 
 		// Instantiate the model.
-		if (model == null) {
-			model = new Towers("Hanoi Towers Game", start);
+		if (this.model == null) {
+			this.model = new Towers("Hanoi Towers Game", start);
 
-			model.addWindowListener(new WindowAdapter() {
+			this.model.addWindowListener(new WindowAdapter() {
+				@Override
 				public void windowClosing(WindowEvent e) {
 					try {
-						model.dispose();
+						HanoiInterface.this.model.dispose();
 						kill();
 					} catch (ManagementException e1) {
 						e1.printStackTrace();
@@ -102,29 +98,28 @@ public class HanoiInterface extends AbstractEnvironment {
 			});
 			;
 		} else {
-			model.reset(start);
+			this.model.reset(start);
 		}
 
 		// Make the model-window visible.
-		model.setVisible(true);
+		this.model.setVisible(true);
 
 		setState(EnvironmentState.PAUSED);
 	}
 
 	@Override
 	public void kill() throws ManagementException {
-		if (model != null) {
-			model.removeAll(); // TODO Not needed? Dispose / GC takes care of
-								// it?
-			gui = null;
+		if (this.model != null) {
+			this.model.removeAll(); // TODO Not needed?
 		}
 		try {
 			deleteEntity("entity");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if (!getState().equals(EnvironmentState.KILLED))
+		if (!getState().equals(EnvironmentState.KILLED)) {
 			setState(EnvironmentState.KILLED);
+		}
 	}
 
 	/**
@@ -136,11 +131,11 @@ public class HanoiInterface extends AbstractEnvironment {
 	protected boolean isSupportedByEnvironment(Action action) {
 		if (action.getName().equals("add") && action.getParameters().size() == 2) {
 			return true;
-		}
-		if (action.getName().equals("move") && action.getParameters().size() == 2) {
+		} else if (action.getName().equals("move") && action.getParameters().size() == 2) {
 			return true;
+		} else {
+			return false;
 		}
-		return false;
 	}
 
 	/**
