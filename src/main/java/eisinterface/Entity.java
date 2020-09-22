@@ -17,9 +17,9 @@ import hanoi.gui.Towers;
  * @author Sander van den Oever
  */
 public class Entity {
-	Towers model;
+	private final Towers model;
 
-	public Entity(Towers model) {
+	public Entity(final Towers model) {
 		this.model = model;
 	}
 
@@ -30,12 +30,12 @@ public class Entity {
 	 */
 	@AsPercept(name = "disc", multiplePercepts = true, multipleArguments = true)
 	public List<List<Integer>> discs() {
-		List<List<Integer>> discs = new LinkedList<>();
+		final List<List<Integer>> discs = new LinkedList<>();
 
 		if (this.model.getPins() != null) {
 			for (Drawable.Disc disc : this.model.getPins()) {
 				while (disc != null) {
-					List<Integer> entry = new ArrayList<>(2);
+					final List<Integer> entry = new ArrayList<>(2);
 					entry.add(disc.number);
 					entry.add(disc.lvl);
 
@@ -65,13 +65,13 @@ public class Entity {
 	 */
 	@AsPercept(name = "on", multiplePercepts = true, multipleArguments = true)
 	public List<List<Integer>> onPin() {
-		List<List<Integer>> list = new LinkedList<>();
+		final List<List<Integer>> list = new LinkedList<>();
 
 		if (this.model.getPins() != null) {
 			for (Drawable.Disc disc : this.model.getPins()) {
 				// Disc now is the first disc on the current pin
 				while (disc != null) {
-					List<Integer> entry = new ArrayList<>(3);
+					final List<Integer> entry = new ArrayList<>(3);
 					entry.add(disc.number);
 					entry.add(disc.pin);
 
@@ -100,7 +100,7 @@ public class Entity {
 	 *             TODO pins[to] possible out of bounds
 	 */
 	@AsAction(name = "move")
-	public void moveDisc(int disc, int to) throws ActException {
+	public void moveDisc(final int disc, final int to) throws ActException {
 		if (this.model.discExists(disc)) {
 			this.model.moveDisc(disc, to);
 		} else {

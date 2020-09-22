@@ -10,11 +10,11 @@ import hanoi.gui.Towers;
  * Simple testing class.
  */
 public class Hanoi {
-	public static void main(String[] args) throws ActException {
-		Towers window = new Towers("The Hanoi Puzzle", null);
+	public static void main(final String... args) throws ActException {
+		final Towers window = new Towers("The Hanoi Puzzle", null);
 		window.setVisible(true);
 
-		List<Integer> list = new ArrayList<>(4);
+		final List<Integer> list = new ArrayList<>(4);
 		list.add(0);
 		list.add(0);
 		list.add(0);

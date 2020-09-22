@@ -9,24 +9,24 @@ import eis.exceptions.ActException;
 
 public class Towers extends Frame {
 	private static final long serialVersionUID = 1L;
-	Drawable canvas;
+	private Drawable canvas;
 
-	public Towers(String title, List<Integer> list) {
+	public Towers(final String title, final List<Integer> list) {
 		super(title);
-		add(this.canvas = new Drawable(this));
+		add(this.canvas = new Drawable());
 		reset(list);
 	}
 
 	@Override
-	public void paint(Graphics g) {
+	public void paint(final Graphics g) {
 		this.canvas.paint(g);
 	}
 
-	public void addDisc(int disc, int p) {
+	public void addDisc(final int disc, final int p) {
 		this.canvas.addDisc(disc, p);
 	}
 
-	public void moveDisc(int disc, int to) throws ActException {
+	public void moveDisc(final int disc, final int to) throws ActException {
 		if (validMove(disc, to)) {
 			this.canvas.moveDisc(disc, to);
 		} else {
@@ -49,14 +49,14 @@ public class Towers extends Frame {
 			remove(this.canvas);
 		}
 
-		add(this.canvas = new Drawable(this));
+		add(this.canvas = new Drawable());
 
 		pack();
 
 		// Draw the discs
 		int disc = 1;
-		for (Integer x : list) {
-			addDisc(disc, x.intValue());
+		for (final Integer x : list) {
+			addDisc(disc, x);
 			disc++;
 		}
 	}
@@ -65,9 +65,9 @@ public class Towers extends Frame {
 		return this.canvas.pins;
 	}
 
-	public boolean discExists(int disc) {
+	public boolean discExists(final int disc) {
 		if (getPins() != null) {
-			Drawable.Disc[] pins = getPins();
+			final Drawable.Disc[] pins = getPins();
 			for (Drawable.Disc d : pins) {
 				while (d != null) {
 					if (d.number == disc) {
@@ -80,10 +80,10 @@ public class Towers extends Frame {
 		return false;
 	}
 
-	public boolean validMove(int d, int to) {
+	public boolean validMove(final int d, final int to) {
 		if (discExists(d)) {
-			Drawable.Disc disc = getDisc(d);
-			Drawable.Disc destination = getPins()[to];
+			final Drawable.Disc disc = getDisc(d);
+			final Drawable.Disc destination = getPins()[to];
 			if (destination != null) {
 				return (disc.size < destination.size);
 			} else {
@@ -93,8 +93,8 @@ public class Towers extends Frame {
 		return false;
 	}
 
-	public Drawable.Disc getDisc(int disc) {
-		Drawable.Disc[] pins = getPins();
+	public Drawable.Disc getDisc(final int disc) {
+		final Drawable.Disc[] pins = getPins();
 		for (Drawable.Disc d : pins) {
 			while (d != null) {
 				if (d.number == disc) {
@@ -107,7 +107,7 @@ public class Towers extends Frame {
 	}
 
 	public void printDiscs() {
-		Drawable.Disc[] pins = getPins();
+		final Drawable.Disc[] pins = getPins();
 		for (Drawable.Disc d : pins) {
 			String res = "Pin[";
 			while (d != null) {

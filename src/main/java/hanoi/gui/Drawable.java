@@ -7,39 +7,36 @@ import java.awt.Graphics;
 
 public class Drawable extends Canvas {
 	private static final long serialVersionUID = 1L;
-	Towers window;
 
 	/**
 	 * Main window size.
 	 */
-	static int WIDTH = 300;
-	static int HEIGHT = 200;
+	private static int WIDTH = 300;
+	private static int HEIGHT = 200;
 
 	/**
 	 * The module width of the largest disc.
 	 */
-	static int LARGEST = 9;
-	static int BORDER = 10;
+	private static int LARGEST = 9;
+	private static int BORDER = 10;
 
-	static int MODULE_WIDTH;
-	static int MODULE_HEIGHT;
-	static int VERTICAL_BASE;
-	static int GAP;
+	private static int MODULE_WIDTH;
+	private static int MODULE_HEIGHT;
+	private static int VERTICAL_BASE;
+	private static int GAP;
 
-	boolean resized = true;
-	int dx = 0;
-	int dy = 0;
-	int[] center = new int[3];
-	int PIN_HEIGHT;
+	private int dx = 0;
+	private int dy = 0;
+	private final int[] center = new int[3];
+	private int PIN_HEIGHT;
 
 	synchronized void setup() {
-		Dimension d = getSize();
+		final Dimension d = getSize();
 		if (d.width != WIDTH || d.height != HEIGHT) {
 			this.dx = d.width - WIDTH;
 			this.dy = d.height - HEIGHT;
 			WIDTH = d.width;
 			HEIGHT = d.height;
-			this.resized = true;
 		}
 
 		MODULE_WIDTH = (WIDTH - 2 * BORDER) / (6 * (LARGEST + 1) + 6);
@@ -62,9 +59,9 @@ public class Drawable extends Canvas {
 	/**
 	 * Adding to the paintables.
 	 */
-	void addThing(Block p) {
-		int size = (this.things == null) ? 0 : this.things.length;
-		Block[] tmp = new Block[size + 1];
+	void addThing(final Block p) {
+		final int size = (this.things == null) ? 0 : this.things.length;
+		final Block[] tmp = new Block[size + 1];
 		for (int i = 0; i < size; i++) {
 			tmp[i] = this.things[i];
 		}
@@ -78,33 +75,31 @@ public class Drawable extends Canvas {
 	 * things paintable.
 	 */
 	@Override
-	public void paint(Graphics g) {
+	public void paint(final Graphics g) {
 		if (this.things == null) {
 			return;
 		}
-		for (Block thing : this.things) {
+		for (final Block thing : this.things) {
 			thing.paint(g);
 		}
-		this.resized = false;
 	}
 
 	/**
 	 * A filled rectangle .
 	 */
-	abstract class Block {
+	abstract static class Block {
+		protected int x;
+		protected int y;
+		protected int w;
+		protected int h;
+		private final Color color;
+		private boolean painted = false;
 
-		int x;
-		int y;
-		int w;
-		int h;
-		Color color;
-		boolean painted = false;
-
-		Block(Color c) {
+		Block(final Color c) {
 			this.color = c;
 		}
 
-		protected void paint(Graphics g) {
+		protected void paint(final Graphics g) {
 			synchronized (this) {
 				g.setColor(this.color);
 				g.fillRect(this.x, this.y, this.w, this.h);
@@ -119,16 +114,14 @@ public class Drawable extends Canvas {
 			while (!this.painted) {
 				try {
 					wait();
-				} catch (InterruptedException e) {
+				} catch (final InterruptedException e) {
 				}
 			}
 		}
-
 	}
 
-	class Foundation extends Block {
-
-		Foundation(Color c) {
+	final class Foundation extends Block {
+		Foundation(final Color c) {
 			super(c);
 			setup();
 		}
@@ -139,13 +132,12 @@ public class Drawable extends Canvas {
 			this.w = WIDTH - 2 * GAP;
 			this.h = MODULE_HEIGHT;
 		}
-
 	}
 
-	class Pin extends Block {
+	final class Pin extends Block {
 		int i = -1;
 
-		Pin(int i, Color c) {
+		Pin(final int i, final Color c) {
 			super(c);
 			this.i = i;
 			setup();
@@ -160,26 +152,24 @@ public class Drawable extends Canvas {
 
 	}
 
-	public class Disc extends Block {
-
-		int target;
-		int target_x;
-		int target_y;
-
+	public final class Disc extends Block {
+		private int target;
+		private int target_x;
+		private int target_y;
 		public int pin;
 		public int number;
 		public int lvl;
 		public int size;
 		public Disc next;
 
-		synchronized void pickUp(int t) {
+		synchronized void pickUp(final int t) {
 			this.target = t;
 			this.target_x = xpos(this.target, this.number);
 			Drawable.this.pins[this.pin] = this.next;
 			this.pin = -1;
 		}
 
-		synchronized void putDown(int p) {
+		synchronized void putDown(final int p) {
 			this.lvl = level(p);
 			this.next = Drawable.this.pins[p];
 			Drawable.this.pins[p] = this;
@@ -200,7 +190,7 @@ public class Drawable extends Canvas {
 			this.h = MODULE_HEIGHT;
 		}
 
-		Disc(int num, int p) {
+		Disc(final int num, final int p) {
 			super(Color.black);
 			this.number = num;
 			this.pin = p;
@@ -211,7 +201,7 @@ public class Drawable extends Canvas {
 			setup();
 		}
 
-		void move(int dx, int dy) {
+		void move(final int dx, final int dy) {
 			synchronized (this) {
 				repaint(this.x, this.y, this.w, this.h);
 				this.x += dx;
@@ -221,42 +211,42 @@ public class Drawable extends Canvas {
 			}
 			try {
 				Thread.sleep(10); // slow down
-			} catch (InterruptedException e) {
+			} catch (final InterruptedException e) {
 			}
 		}
 	}
 
-	Disc[] pins = new Disc[3];
+	public Disc[] pins = new Disc[3];
 
 	/**
 	 * Returns the next free module level on a pin.
 	 */
-	int level(int p) {
+	int level(final int p) {
 		return (this.pins[p] == null) ? (LARGEST + 1) : this.pins[p].lvl - 1;
 	}
 
 	/**
 	 * Returns a width pixel offset for a given disc.
 	 */
-	int offset(int num) {
+	int offset(final int num) {
 		return MODULE_WIDTH * (LARGEST - num + 2);
 	}
 
 	/**
 	 * Returns the home point x coordinate for a given disc on a given pin.
 	 */
-	int xpos(int p, int num) {
+	int xpos(final int p, final int num) {
 		return this.center[p] - offset(num);
 	}
 
 	/**
 	 * Returns the home point y coordinate for a given disc on a given pin.
 	 */
-	int ypos(int p, int num) {
+	int ypos(final int p, final int num) {
 		return VERTICAL_BASE + level(p) * MODULE_HEIGHT;
 	}
 
-	public void addDisc(int disc, int p) {
+	public void addDisc(final int disc, final int p) {
 		if (disc < 1) {
 			return;
 		}
@@ -266,7 +256,7 @@ public class Drawable extends Canvas {
 		addThing(new Disc(disc, p));
 	}
 
-	public void moveDisc(int disc, int to) {
+	public void moveDisc(final int disc, final int to) {
 		for (int from = 0; from < 3; from++) {
 			if (to == from) {
 				continue;
@@ -274,19 +264,18 @@ public class Drawable extends Canvas {
 			if (this.pins[from] == null) {
 				continue;
 			}
-			Disc d = this.pins[from];
+			final Disc d = this.pins[from];
 			if (d.number == disc) {
 				new MovingDisc(from, to).action();
 			}
 		}
 	}
 
-	class MovingDisc {
+	final class MovingDisc {
+		private final int from;
+		private final int target;
 
-		int from;
-		int target;
-
-		MovingDisc(int f, int to) {
+		MovingDisc(final int f, final int to) {
 			this.from = f;
 			this.target = to;
 		}
@@ -295,7 +284,7 @@ public class Drawable extends Canvas {
 			System.out.println("moving from " + this.from + " to " + this.target);
 
 			// Remove from pin
-			Disc disc = Drawable.this.pins[this.from];
+			final Disc disc = Drawable.this.pins[this.from];
 			synchronized (Drawable.this) {
 				disc.pickUp(this.target);
 
@@ -305,7 +294,7 @@ public class Drawable extends Canvas {
 				}
 
 				// Shift to target pin
-				int dir = (this.from < this.target) ? MODULE_WIDTH : -MODULE_WIDTH;
+				final int dir = (this.from < this.target) ? MODULE_WIDTH : -MODULE_WIDTH;
 				while (disc.x != disc.target_x) {
 					disc.move(dir, 0);
 				}
@@ -323,8 +312,7 @@ public class Drawable extends Canvas {
 		}
 	}
 
-	Drawable(Towers w) {
-		this.window = w;
+	Drawable() {
 		setSize(WIDTH, HEIGHT);
 		setup();
 

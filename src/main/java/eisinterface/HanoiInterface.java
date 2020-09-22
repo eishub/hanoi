@@ -23,7 +23,7 @@ import hanoi.gui.Towers;
  */
 @SuppressWarnings("serial")
 public class HanoiInterface extends AbstractEnvironment {
-	Towers model = null;
+	private Towers model = null;
 
 	/**
 	 * Initializes and registers an Entity.
@@ -32,14 +32,14 @@ public class HanoiInterface extends AbstractEnvironment {
 	 * @throws ManagementException
 	 */
 	@Override
-	public void init(Map<String, Parameter> parameters) throws ManagementException {
+	public void init(final Map<String, Parameter> parameters) throws ManagementException {
 		// Prepare the model.
 		reset(parameters);
 
 		// Try creating and registering an entity.
 		try {
 			registerEntity("entity", "hanoicontroller", new Entity(this.model));
-		} catch (EntityException e) {
+		} catch (final EntityException e) {
 			throw new ManagementException("Could not create an entity", e);
 		}
 	}
@@ -54,16 +54,16 @@ public class HanoiInterface extends AbstractEnvironment {
 	 *                             supported or the parameters are wrong.
 	 */
 	@Override
-	public void reset(Map<String, Parameter> parameters) throws ManagementException {
+	public void reset(final Map<String, Parameter> parameters) throws ManagementException {
 		// Build the world based on the provided parameters.
-		List<Integer> start = new ArrayList<>();
-		Parameter p = parameters.get("discs");
+		final List<Integer> start = new ArrayList<>();
+		final Parameter p = parameters.get("discs");
 
 		// Prepare model initialisation data.
 		if (p != null) {
 			if (p instanceof ParameterList) {
-				ParameterList list = (ParameterList) p;
-				for (Parameter x : list) {
+				final ParameterList list = (ParameterList) p;
+				for (final Parameter x : list) {
 					// Check for valid parameters and add them to the list.
 					if (!(x instanceof Numeral)) {
 						throw new IllegalArgumentException("Numbers expected but found " + x);
@@ -87,16 +87,16 @@ public class HanoiInterface extends AbstractEnvironment {
 
 			this.model.addWindowListener(new WindowAdapter() {
 				@Override
-				public void windowClosing(WindowEvent e) {
+				public void windowClosing(final WindowEvent e) {
 					try {
 						HanoiInterface.this.model.dispose();
 						kill();
-					} catch (ManagementException e1) {
+					} catch (final ManagementException e1) {
 						e1.printStackTrace();
 					}
 				}
 			});
-			;
+
 		} else {
 			this.model.reset(start);
 		}
@@ -114,7 +114,7 @@ public class HanoiInterface extends AbstractEnvironment {
 		}
 		try {
 			deleteEntity("entity");
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 		if (!getState().equals(EnvironmentState.KILLED)) {
@@ -128,7 +128,7 @@ public class HanoiInterface extends AbstractEnvironment {
 	 * @return true if the action is supported by the environment
 	 */
 	@Override
-	protected boolean isSupportedByEnvironment(Action action) {
+	protected boolean isSupportedByEnvironment(final Action action) {
 		if (action.getName().equals("add") && action.getParameters().size() == 2) {
 			return true;
 		} else if (action.getName().equals("move") && action.getParameters().size() == 2) {
@@ -144,7 +144,7 @@ public class HanoiInterface extends AbstractEnvironment {
 	 * @return Returns true if the action is supported by the type
 	 */
 	@Override
-	protected boolean isSupportedByType(Action action, String type) {
+	protected boolean isSupportedByType(final Action action, final String type) {
 		return isSupportedByEnvironment(action);
 	}
 }
