@@ -5,7 +5,7 @@
 
 	<groupId>eishub</groupId>
 	<artifactId>hanoi</artifactId>
-	<version>1.2.0</version>
+	<version>1.2.1-SNAPSHOT</version>
 	<name>hanoi</name>
 	<description>A simple implementation of the Hanoi game (See http://wikipedia.org/wiki/Hanoi)</description>
 	<url>http://www.github.com/eishub/hanoi</url>
